@@ -21,8 +21,8 @@ const PublicNavigation: React.FC = () => {
   const navigationItems: NavigationItem[] = [
     { label: "Home", path: "/", icon: "Home" },
     { label: "Find Teachers", path: "/teacher-search-discovery", icon: "Search" },
-    { label: "How It Works", path: "#how-it-works", icon: "HelpCircle" },
-    { label: "About", path: "#about", icon: "Info" },
+    { label: "About Us", path: "#about", icon: "Info" },
+    { label: "Contact Us", path: "#how-it-works", icon: "HelpCircle" },
   ]
 
   const isActivePath = (path: string): boolean => {
@@ -43,7 +43,7 @@ const PublicNavigation: React.FC = () => {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm border-b border-border">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -66,7 +66,7 @@ const PublicNavigation: React.FC = () => {
                 className={`flex items-center space-x-1 px-3 py-2 rounded-educational text-sm font-medium transition-educational hover:bg-muted ${isActivePath(item?.path) ? "text-primary bg-primary/10" : "text-text-secondary hover:text-foreground"
                   }`}
               >
-                <Icon name={item?.icon} size={16} />
+                {/* <Icon name={item?.icon} size={16} /> */}
                 <span>{item?.label}</span>
               </Link>
             ))}
