@@ -147,7 +147,7 @@ const TestimonialsSection: React.FC = () => {
               </div>
 
               <blockquote className="text-text-secondary leading-relaxed mb-4">
-                "{testimonials[currentTestimonial]?.content}"
+                {testimonials[currentTestimonial]?.content}
               </blockquote>
 
               <div className="flex items-center justify-between">
@@ -206,7 +206,7 @@ const TestimonialsSection: React.FC = () => {
                 </div>
               </div>
 
-              <blockquote className="text-text-secondary leading-relaxed mb-6">"{testimonial.content}"</blockquote>
+              <blockquote className="text-text-secondary leading-relaxed mb-6">{testimonial.content}</blockquote>
 
               <div className="flex items-center justify-between">
                 <span
