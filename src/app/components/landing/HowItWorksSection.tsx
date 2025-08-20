@@ -66,7 +66,7 @@ const HowItWorksSection: React.FC = () => {
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">How It Works</h2>
           <p className="text-xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
-            Getting started with language learning is simple. Follow these five easy steps to begin your child's multilingual journey.
+            {"Getting started with language learning is simple. Follow these five easy steps to begin your child's multilingual journey."}
           </p>
         </div>
 
@@ -107,7 +107,7 @@ const HowItWorksSection: React.FC = () => {
         <div className="text-center mt-16">
           <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-full text-sm font-medium">
             <Icon name="Sparkles" size={16} />
-            <span>Start your child's language journey today!</span>
+            <span>{"Start your child's language journey today!"}</span>
           </div>
         </div>
       </div>
