@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Button from "../../components/ui/Button";
 import Icon from "../../components/ui/Icon";
 import { FC } from "react";
+import Image from "next/image";
 
 const CallToActionSection: FC = () => {
   const router = useRouter();
@@ -18,6 +19,16 @@ const CallToActionSection: FC = () => {
 
   return (
     <section className="py-16 lg:py-24 bg-gradient-to-br from-primary via-primary to-secondary relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/images/callToActionSection/bg.png"
+          alt="Decorative background"
+          fill
+          className="object-cover opacity-20"
+          priority
+        />
+      </div>
       {/* Background Decorations */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full animate-pulse"></div>
@@ -33,7 +44,7 @@ const CallToActionSection: FC = () => {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Main Content */}
-        <div className="max-w-4xl mx-auto">
+        <div className="mx-auto">
           <h2 className="text-3xl sm:text-4xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight">
             Ready to Start Your Child&apos;s
             <span className="block text-yellow-300">Language Adventure?</span>
@@ -71,7 +82,7 @@ const CallToActionSection: FC = () => {
           </div>
 
           {/* Features Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
             <div className="text-center">
               <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Icon name="Shield" size={32} className="text-white" />
@@ -80,7 +91,7 @@ const CallToActionSection: FC = () => {
                 Safe & Secure
               </h3>
               <p className="text-white/80 text-sm">
-                Protected learning environment with verified teachers
+                Safe, secure learning environment with verified teachers and data privacy protections.
               </p>
             </div>
 
@@ -110,13 +121,25 @@ const CallToActionSection: FC = () => {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Icon name="Gamepad" size={32} className="text-white" />
+              </div>
+              <h3 className="font-heading font-semibold text-white mb-2">
+                Curriculum-aligned games
+              </h3>
+              <p className="text-white/80 text-sm">
+                Reinforce language skills with fun, curriculum-aligned games.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Icon name="TrendingUp" size={32} className="text-white" />
               </div>
               <h3 className="font-heading font-semibold text-white mb-2">
                 Track Progress
               </h3>
               <p className="text-white/80 text-sm">
-                Monitor learning with detailed reports
+                Monitor learning progress with detailed reports
               </p>
             </div>
           </div>
