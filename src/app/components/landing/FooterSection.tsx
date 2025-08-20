@@ -149,13 +149,13 @@ const FooterSection: React.FC = () => {
               </div>
 
               {/* Input + Button */}
-              <div className="flex flex-col w-full sm:flex-col lg:flex-row lg:w-auto">
+              <div className="flex flex-row w-auto">
                 <input
                   type="email"
                   placeholder="Enter your email"
                   className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-full"
                 />
-                <button className="px-4 py-2 bg-blue-700 hover:bg-blue-800 rounded-r-lg transition-educational flex items-center justify-center w-full lg:w-auto">
+                <button className="px-4 py-2 bg-blue-700 hover:bg-blue-800 rounded-r-lg transition-educational flex items-center justify-center w-auto">
                   <Icon name="Send" size={16} />
                 </button>
               </div>
