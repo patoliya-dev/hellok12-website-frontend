@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Icon from "../../components/ui/Icon";
+import Icon from "../ui/Icon";
 
 interface Stat {
   icon: string;

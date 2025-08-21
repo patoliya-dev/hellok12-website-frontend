@@ -4,7 +4,7 @@ import HowItWorksSection from "./components/landing/HowItWorksSection"
 import TestimonialsSection from "./components/landing/TestimonialsSection"
 import TeacherProfilesSection from "./components/landing/TeacherProfilesSection"
 import CallToActionSection from "./components/landing/CallToActionSection"
-import FooterSection from "./components/landing/FooterSection"
+import FooterSection from "./components/ui/FooterSection"
 
 export default function LandingPage() {
   return (

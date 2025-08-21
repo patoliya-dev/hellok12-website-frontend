@@ -238,7 +238,7 @@ const TestimonialSection: React.FC = () => {
           ].map((item, index) => (
             <div key={index} className="text-center">
               <div
-                className={`w-12 h-12 mx-auto mb-4 ${item.color.replace("text-", "bg-")}/10 rounded-xl flex items-center justify-center`}
+                className={`w-12 h-12 mx-auto mb-4 flex items-center justify-center`}
               >
                 <Icon name={item.icon} size={24} className={item.color} />
               </div>
