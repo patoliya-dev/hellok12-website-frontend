@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import Icon from "../../components/ui/Icon";
-import Button from "../../components/ui/Button";
+import Icon from "../ui/Icon";
+import Button from "../ui/Button";
 
 const CallToAction: React.FC = () => {
   const handleNavigation = (path: string) => {

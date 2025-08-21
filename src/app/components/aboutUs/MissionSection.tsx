@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import Icon from "../../components/ui/Icon";
 import Image from "next/image";
+import Icon from "../ui/Icon";
 
 // Define TypeScript type for mission points
 interface MissionPoint {

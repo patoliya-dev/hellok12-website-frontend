@@ -5,7 +5,7 @@ import StatsSection from "../components/aboutUs/StatsSection";
 import TestimonialSection from "../components/aboutUs/TestimonialSection";
 import TeacherSpotlight from "../components/aboutUs/TeacherSpotlight";
 import CallToActionSection from "../components/aboutUs/CallToAction"
-import FooterSection from "../components/landing/FooterSection"
+import FooterSection from "../components/ui/FooterSection"
 
 export default function AboutUs() {
   return (
