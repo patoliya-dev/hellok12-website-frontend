@@ -221,7 +221,7 @@ const StatsSection: React.FC = () => {
                 key={index}
                 className="bg-card rounded-xl p-6 text-center shadow-soft border border-border"
               >
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 flex items-center justify-center mx-auto mb-4">
                   <Icon name={achievement.icon} size={24} className="text-primary" />
                 </div>
                 <h4 className="font-semibold text-foreground mb-1">
