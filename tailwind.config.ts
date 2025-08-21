@@ -45,6 +45,10 @@ const config: Config = {
           DEFAULT: "var(--color-accent)",
           foreground: "var(--color-accent-foreground)",
         },
+        purple: {
+          DEFAULT: "var(--color-purple)",
+          foreground: "var(--color-purple-foreground)",
+        },
         popover: {
           DEFAULT: "var(--color-popover)",
           foreground: "var(--color-popover-foreground)",
@@ -66,6 +70,7 @@ const config: Config = {
           foreground: "var(--color-error-foreground)",
         },
         surface: "var(--color-surface)",
+        "text-purple": "var(--color-text-purple)",
         "text-primary": "var(--color-text-primary)",
         "text-secondary": "var(--color-text-secondary)",
       },

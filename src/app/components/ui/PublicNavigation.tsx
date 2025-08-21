@@ -21,8 +21,8 @@ const PublicNavigation: React.FC = () => {
   const navigationItems: NavigationItem[] = [
     { label: "Home", path: "/", icon: "Home" },
     { label: "Find Teachers", path: "/teacher-search-discovery", icon: "Search" },
-    { label: "About Us", path: "#about", icon: "Info" },
-    { label: "Contact Us", path: "#how-it-works", icon: "HelpCircle" },
+    { label: "About Us", path: "/about-us", icon: "Info" },
+    { label: "Contact Us", path: "/contact-us", icon: "HelpCircle" },
   ]
 
   const isActivePath = (path: string): boolean => {
@@ -43,7 +43,7 @@ const PublicNavigation: React.FC = () => {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm border-b border-border shadow-header-bottom">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -102,8 +102,8 @@ const PublicNavigation: React.FC = () => {
                   href={item?.path}
                   onClick={closeMobileMenu}
                   className={`flex items-center space-x-3 px-4 py-3 rounded-educational text-base font-medium transition-educational hover:bg-muted ${isActivePath(item?.path)
-                      ? "text-primary bg-primary/10"
-                      : "text-text-secondary hover:text-foreground"
+                    ? "text-primary bg-primary/10"
+                    : "text-text-secondary hover:text-foreground"
                     }`}
                 >
                   <Icon name={item?.icon} size={20} />

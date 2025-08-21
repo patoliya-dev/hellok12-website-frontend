@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Button from "../../components/ui/Button";
-import Icon from "../../components/ui/Icon";
+import Button from "../ui/Button";
+import Icon from "../ui/Icon";
 import { FC } from "react";
 import Image from "next/image";
 

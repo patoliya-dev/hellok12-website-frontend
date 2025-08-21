@@ -3,7 +3,7 @@
 import React from "react"
 import Link from "next/link"
 import Image from "next/image";
-import Icon from "../../components/ui/Icon"
+import Icon from "../ui/Icon"
 
 interface FooterLink {
   label: string
