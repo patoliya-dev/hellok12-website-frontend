@@ -1,5 +1,5 @@
-// components/ui/Button.tsx
 "use client";
+// components/ui/Button.tsx
 
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
@@ -41,7 +41,7 @@ const buttonVariants = cva(
 // ✅ Props typing
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
   iconName?: string | null;
