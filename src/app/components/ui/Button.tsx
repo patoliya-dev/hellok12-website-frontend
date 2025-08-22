@@ -38,7 +38,7 @@ const buttonVariants = cva(
   }
 );
 
-// ✅ Props typing
+// Props typing
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
   VariantProps<typeof buttonVariants> {
@@ -50,7 +50,7 @@ export interface ButtonProps
   fullWidth?: boolean;
 }
 
-// ✅ ForwardRef + Type-safe props
+// ForwardRef + Type-safe props
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {

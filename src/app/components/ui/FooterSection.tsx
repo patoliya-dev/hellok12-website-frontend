@@ -30,7 +30,7 @@ const FooterSection: React.FC = () => {
       links: [
         { label: "Find Teachers", path: "/teacher-search-discovery" },
         { label: "Become a Teacher", path: "#how-it-works" },
-        { label: "Pricing", path: "#pricing" },
+        { label: "Pricing", path: "/pricing" },
       ],
     },
     {
@@ -116,7 +116,7 @@ const FooterSection: React.FC = () => {
           </div>
 
           {/* Footer Links + Newsletter on same row */}
-          <div className="lg:col-span-1 flex flex-col lg:flex-col justify-between gap-16">
+          <div className="lg:col-span-1 flex flex-col lg:flex-col justify-between gap-12">
             {/* Footer Links */}
             <div className="flex flex-col lg:flex-row gap-16">
               {footerSections.map((section) => (
