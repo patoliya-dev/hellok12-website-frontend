@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Input from '../ui/Input';
-import Icon from '../ui/Icon';
+import Input from './Input';
+import Icon from './Icon';
 
 interface SearchBarProps {
   onSearch: (value: string) => void;
