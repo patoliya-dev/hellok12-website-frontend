@@ -1,11 +1,9 @@
 "use client"
 import React from "react";
-import Link from "next/link";
 import Head from "next/head";
 
 import Header from "../components/ui/PublicNavigation";
 import Icon from "../components/ui/Icon";
-import Button from "../components/ui/Button";
 import PricingCard from "../components/pricing/PricingCard";
 import TrustSignals from "../components/pricing/TrustSignals";
 import FooterSection from "../components/ui/FooterSection";

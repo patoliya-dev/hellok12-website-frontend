@@ -42,7 +42,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setSearchTerm(e.target.value)
         }
-        className="pl-10 pr-10 h-12"
+        className="pl-10 pr-10 h-12 border-muted-1"
       />
 
       {searchTerm && (
