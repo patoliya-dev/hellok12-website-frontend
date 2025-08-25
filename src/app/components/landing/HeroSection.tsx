@@ -2,9 +2,24 @@
 import { useRouter } from "next/navigation"
 import Button from "../ui/Button"
 import AppImage from "../ui/AppImage"
+import { useEffect, useState } from "react"
 
 const HeroSection = () => {
   const router = useRouter()
+  const languages = ["English", "Spanish", "French", "German", "Chinese", "Japanese"]; // Add as many as you like
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % languages.length);
+        setFade(true); // Trigger fade-in
+      }, 500); // duration of fade-out
+    }, 2000); // Change language every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [languages.length]);
 
   const handleFindTeacher = () => {
     router.push("/teacher-search-discovery")
@@ -23,11 +38,14 @@ const HeroSection = () => {
           {/* Content */}
           <div className="text-center lg:text-left">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-semibold text-foreground leading-tight mb-6">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+              <span
+                className={`text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary inline-block transition-opacity duration-500 ${fade ? "opacity-100 animate-in fade-in" : "opacity-0 animate-out fade-out"
+                  }`}
+              >
                 {" "}
-                English | {" "}
+                {languages[currentIndex]} |
               </span>
-              Lessons for
+              {" "} Lessons for
               Kids with Expert Tutors
             </h1>
 

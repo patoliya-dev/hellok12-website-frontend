@@ -120,7 +120,7 @@ const TeacherProfilesSection: React.FC = () => {
   }
 
   const handleViewProfile = (teacherId: number): void => {
-    router.push(`/teacher-profile-detail?id=${teacherId}`)
+    router.push(`/teacher-profile-detail/${teacherId}`)
   }
 
   const handleViewAllTeachers = (): void => {

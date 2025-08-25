@@ -165,7 +165,7 @@ const FooterSection: React.FC = () => {
       </div>
 
       {/* Bottom Footer */}
-      <div className="border-t border-gray-800">
+      <div className="border-t border-muted-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="flex flex-wrap items-center space-x-6 text-sm text-gray-400">
