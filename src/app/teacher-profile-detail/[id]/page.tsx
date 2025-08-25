@@ -8,7 +8,6 @@ import TabNavigation from "../../components/teacherProfileDetails/TabNavigation"
 import AboutTab from "../../components/teacherProfileDetails/AboutTab";
 import ClassesTab from "../../components/teacherProfileDetails/ClassesTab";
 import ReviewsTab from "../../components/teacherProfileDetails/ReviewsTab";
-import MobileBottomBar from "../../components/teacherProfileDetails/MobileBottomBar";
 import { mockClasses, mockReviews } from "@/lib/mock-data";
 import type { Class, Review } from "../../../lib/types"
 
@@ -131,9 +130,6 @@ const TeacherProfileDetail: React.FC = () => {
     return acc;
   }, {});
 
-  const handleViewAllClasses = () => setActiveTab("courses");
-  const handleQuickContact = () => console.log("Quick contact clicked");
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [activeTab]);
@@ -147,8 +143,6 @@ const TeacherProfileDetail: React.FC = () => {
 
           <TeacherHero
             teacher={teacher}
-            onViewAllClasses={handleViewAllClasses}
-            onQuickContact={handleQuickContact}
           />
         </div>
 
@@ -175,12 +169,6 @@ const TeacherProfileDetail: React.FC = () => {
           </div>
         </div>
       </main>
-
-      <MobileBottomBar
-        onViewAllClasses={handleViewAllClasses}
-        onQuickContact={handleQuickContact}
-        classCount={courses?.length}
-      />
     </div>
   );
 };

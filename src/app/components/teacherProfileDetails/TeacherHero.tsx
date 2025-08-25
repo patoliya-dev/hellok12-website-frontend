@@ -23,11 +23,9 @@ interface Teacher {
 
 interface TeacherHeroProps {
   teacher: Teacher;
-  onViewAllClasses: () => void;
-  onQuickContact: () => void;
 }
 
-const TeacherHero: React.FC<TeacherHeroProps> = ({ teacher, onViewAllClasses, onQuickContact }) => {
+const TeacherHero: React.FC<TeacherHeroProps> = ({ teacher }) => {
   const getAvailabilityStatus = () => {
     if (teacher?.isOnline) {
       return { text: "Available Now", color: "text-success", bgColor: "bg-success/10" };

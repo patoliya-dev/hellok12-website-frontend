@@ -112,7 +112,10 @@ const ClassCard: React.FC<ClassCardProps> = ({ classItem, teacherId }) => {
             <span className="text-xs text-text-secondary">per session</span>
           </div>
           <div className="flex items-center gap-2">
-            {classItem?.type === "Group" && classItem?.enrolledStudents! >= classItem?.maxStudents! ? (
+            {classItem?.type === "Group" &&
+              classItem?.enrolledStudents &&
+              classItem?.maxStudents &&
+              classItem.enrolledStudents >= classItem.maxStudents ? (
               <Button variant="secondary" disabled>
                 Class Full
               </Button>

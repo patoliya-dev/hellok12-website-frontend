@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Core entity types with proper relationships
 export type Teacher = {
   id: string

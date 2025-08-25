@@ -129,7 +129,7 @@ const TeacherGrid: React.FC<TeacherGridProps> = ({
       {!hasMore && teachers?.length > 0 && (
         <div className="text-center pt-8 pb-4">
           <p className="text-text-secondary">
-            You've seen all {teachers?.length} teachers matching your criteria
+            {`You've seen all ${teachers?.length} teachers matching your criteria`}
           </p>
         </div>
       )}
