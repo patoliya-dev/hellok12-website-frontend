@@ -282,7 +282,7 @@ const PublicCourseDetails: React.FC = () => {
               <Icon name="AlertCircle" size={48} className="text-muted-foreground mx-auto mb-4" />
               <h2 className="text-2xl font-semibold text-foreground mb-2">Course Not Found</h2>
               <p className="text-muted-foreground mb-6">
-                The course you're looking for doesn't exist or is no longer available.
+                {"The course you're looking for doesn't exist or is no longer available."}
               </p>
               <Button onClick={() => router.push('/')}>
                 <Icon name="ArrowLeft" size={16} className="mr-2" />
