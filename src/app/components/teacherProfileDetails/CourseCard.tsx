@@ -6,13 +6,13 @@ import Icon from "../../components/ui/Icon";
 import Button from "../../components/ui/Button";
 
 // TypeScript types
-interface ClassSchedule {
+interface CourseSchedule {
   days?: string[];
   time?: string;
   flexible?: boolean;
 }
 
-interface ClassItem {
+interface CourseItem {
   id: string;
   title: string;
   description?: string;
@@ -22,49 +22,49 @@ interface ClassItem {
   maxStudents?: number;
   enrolledStudents?: number;
   location?: string;
-  schedule?: ClassSchedule;
+  schedule?: CourseSchedule;
   nextSession?: string;
 }
 
-interface ClassCardProps {
-  classItem: ClassItem;
+interface CourseCardProps {
+  courseItem: CourseItem;
   teacherId: string;
 }
 
-const ClassCard: React.FC<ClassCardProps> = ({ classItem, teacherId }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ courseItem, teacherId }) => {
   const router = useRouter();
 
   const handleBookNow = () => {
     // router.push({
     //   pathname: "/class-booking-flow",
     //   query: {
-    //     classId: classItem?.id,
+    //     classId: courseItem?.id,
     //     teacherId: teacherId,
-    //     classType: classItem?.type,
-    //     className: classItem?.title,
-    //     price: classItem?.price
+    //     classType: courseItem?.type,
+    //     className: courseItem?.title,
+    //     price: courseItem?.price
     //   } as any
     // });
 
     const params = new URLSearchParams({
-      classId: classItem.id,
+      classId: courseItem.id,
       teacherId: teacherId,
-      classType: classItem.type,
-      className: classItem.title,
-      price: classItem.price.toString(),
+      classType: courseItem.type,
+      className: courseItem.title,
+      price: courseItem.price.toString(),
     });
 
-    router.push(`/class-booking-flow?${params.toString()}`);
+    router.push(`/course-detail/${courseItem.id}`);
   };
 
-  const getTypeIcon = () => (classItem?.type === "1-on-1" ? "User" : "Users");
+  const getTypeIcon = () => (courseItem?.type === "1-on-1" ? "User" : "Users");
 
   const getTypeBadgeColor = () =>
-    classItem?.type === "1-on-1" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent";
+    courseItem?.type === "1-on-1" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent";
 
   const formatSchedule = () => {
-    if (classItem?.type === "1-on-1") return "Flexible scheduling available";
-    return `${classItem?.schedule?.days?.join(", ")} at ${classItem?.schedule?.time}`;
+    if (courseItem?.type === "1-on-1") return "Flexible scheduling available";
+    return `${courseItem?.schedule?.days?.join(", ")} at ${courseItem?.schedule?.time}`;
   };
 
   return (
@@ -73,33 +73,33 @@ const ClassCard: React.FC<ClassCardProps> = ({ classItem, teacherId }) => {
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <h3 className="text-lg font-semibold text-foreground">{classItem?.title}</h3>
+              <h3 className="text-lg font-semibold text-foreground">{courseItem?.title}</h3>
             </div>
-            <p className="text-text-secondary text-sm mb-3 line-clamp-2">{classItem?.description}</p>
+            <p className="text-text-secondary text-sm mb-3 line-clamp-2">{courseItem?.description}</p>
           </div>
         </div>
 
         <div className="space-y-3 mb-4">
           <div className="flex items-center gap-2 text-sm text-text-secondary">
             <Icon name="Clock" size={16} />
-            <span>{classItem?.duration} minutes</span>
+            <span>{courseItem?.duration} minutes</span>
           </div>
           <div className="flex items-center gap-2 text-sm text-text-secondary">
             <Icon name="Calendar" size={16} />
             <span>{formatSchedule()}</span>
           </div>
-          {classItem?.type === "Group" && classItem?.location && (
+          {courseItem?.type === "Group" && courseItem?.location && (
             <div className="flex items-center gap-2 text-sm text-text-secondary">
               <Icon name="MapPin" size={16} />
-              <span>{classItem?.location}</span>
+              <span>{courseItem?.location}</span>
             </div>
           )}
           <div className="flex items-center gap-2 text-sm text-text-secondary">
             <Icon name="Users" size={16} />
             <span>
-              {classItem?.type === "1-on-1"
+              {courseItem?.type === "1-on-1"
                 ? "Individual session"
-                : `${classItem?.enrolledStudents}/${classItem?.maxStudents} students enrolled`}
+                : `${courseItem?.enrolledStudents}/${courseItem?.maxStudents} students enrolled`}
             </span>
           </div>
         </div>
@@ -108,14 +108,14 @@ const ClassCard: React.FC<ClassCardProps> = ({ classItem, teacherId }) => {
       <div>
         <div className="flex items-center justify-between pt-4 border-t border-border">
           <div className="flex flex-col">
-            <span className="text-2xl font-bold text-foreground">${classItem?.price}</span>
+            <span className="text-2xl font-bold text-foreground">${courseItem?.price}</span>
             <span className="text-xs text-text-secondary">per session</span>
           </div>
           <div className="flex items-center gap-2">
-            {classItem?.type === "Group" &&
-              classItem?.enrolledStudents &&
-              classItem?.maxStudents &&
-              classItem.enrolledStudents >= classItem.maxStudents ? (
+            {courseItem?.type === "Group" &&
+              courseItem?.enrolledStudents &&
+              courseItem?.maxStudents &&
+              courseItem.enrolledStudents >= courseItem.maxStudents ? (
               <Button variant="secondary" disabled>
                 Class Full
               </Button>
@@ -130,22 +130,12 @@ const ClassCard: React.FC<ClassCardProps> = ({ classItem, teacherId }) => {
         <div className="mt-6 bg-warning/10">
           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getTypeBadgeColor()}`}>
             <Icon name={getTypeIcon()} size={12} />
-            {classItem?.type}
+            {courseItem?.type}
           </span>
         </div>
       </div>
-
-
-      {/* {classItem?.type === "Group" && classItem?.nextSession && (
-        <div className="mt-3 p-3 bg-warning/10 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Icon name="Clock" size={16} className="text-warning" />
-            <span className="text-sm font-medium text-warning">Next session: {classItem?.nextSession}</span>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };
 
-export default ClassCard;
+export default CourseCard;

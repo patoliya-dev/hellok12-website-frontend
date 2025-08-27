@@ -2,10 +2,10 @@
 "use client";
 
 import React, { useState } from 'react';
-import Icon from '../../components/ui/Icon';
-import Button from '../../components/ui/Button';
-import Select from '../../components/ui/Select';
-import ClassCard from './ClassCard';
+import Icon from '../ui/Icon';
+import Button from '../ui/Button';
+import Select from '../ui/Select';
+import CourseCard from './CourseCard';
 
 // Define types for class item and props
 interface ClassItem {
@@ -114,12 +114,12 @@ const ClassesTab: React.FC<ClassesTabProps> = ({ courses, teacherId }) => {
       {/* Classes Grid */}
       {processedClasses?.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2">
-          {processedClasses?.map((classItem) => (
-            <ClassCard
-              key={classItem?.id}
-              classItem={{
-                ...classItem,
-                id: classItem.id.toString(),   // Convert id to string for ClassCard
+          {processedClasses?.map((courseItem) => (
+            <CourseCard
+              key={courseItem?.id}
+              courseItem={{
+                ...courseItem,
+                id: courseItem.id.toString(),   // Convert id to string for CourseCard
               }}
               teacherId={teacherId.toString()}
             />
@@ -145,28 +145,6 @@ const ClassesTab: React.FC<ClassesTabProps> = ({ courses, teacherId }) => {
           </Button>
         </div>
       )}
-
-      {/* Class Types Info */}
-      {/* <div className="grid md:grid-cols-2 gap-4 mt-8">
-        <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
-          <div className="flex items-center gap-2 mb-2">
-            <Icon name="User" size={20} className="text-primary" />
-            <h4 className="font-medium text-foreground">1-on-1 Classes</h4>
-          </div>
-          <p className="text-sm text-text-secondary">
-            Personalized attention with flexible scheduling based on your availability and the teacher's calendar.
-          </p>
-        </div>
-        <div className="p-4 bg-accent/5 border border-accent/20 rounded-lg">
-          <div className="flex items-center gap-2 mb-2">
-            <Icon name="Users" size={20} className="text-accent" />
-            <h4 className="font-medium text-foreground">Group Classes</h4>
-          </div>
-          <p className="text-sm text-text-secondary">
-            Learn with others in a collaborative environment with fixed schedules and structured curriculum.
-          </p>
-        </div>
-      </div> */}
     </div>
   );
 };

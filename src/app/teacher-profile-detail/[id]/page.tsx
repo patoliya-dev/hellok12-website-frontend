@@ -6,10 +6,11 @@ import Breadcrumb from "../../components/ui/BreadcrumbNavigation";
 import TeacherHero from "../../components/teacherProfileDetails/TeacherHero";
 import TabNavigation from "../../components/teacherProfileDetails/TabNavigation";
 import AboutTab from "../../components/teacherProfileDetails/AboutTab";
-import ClassesTab from "../../components/teacherProfileDetails/ClassesTab";
+import CoursesTab from "../../components/teacherProfileDetails/CoursesTab";
 import ReviewsTab from "../../components/teacherProfileDetails/ReviewsTab";
 import { mockClasses, mockReviews } from "@/lib/mock-data";
 import type { Class, Review } from "../../../lib/types"
+import TeachingHighlightsManagement from "@/app/components/teachingHighlightsManagement";
 
 // Types
 interface Certificate {
@@ -47,7 +48,7 @@ interface Teacher {
 }
 
 const TeacherProfileDetail: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"about" | "courses" | "reviews">(
+  const [activeTab, setActiveTab] = useState<"about" | "courses" | "reviews" | "highlights">(
     "about"
   );
 
@@ -69,7 +70,6 @@ const TeacherProfileDetail: React.FC = () => {
     studentsCount: 245,
     classesCount: 12,
     bio: `I'm a passionate language educator with over 8 years of experience teaching English, Spanish, and French to students of all ages. My teaching philosophy centers on creating an engaging, supportive environment where students feel confident to practice and make mistakes as part of their learning journey.\n\nI hold a Master's degree in Applied Linguistics and am certified in TESOL/TEFL. I've worked with students from diverse cultural backgrounds, helping them achieve their language goals whether for academic purposes, career advancement, or personal enrichment.`,
-    // bio: `I'm a passionate language educator with over 8 years of experience teaching English, Spanish, and French to students of all ages. My teaching philosophy centers on creating an engaging, supportive environment where students feel confident to practice and make mistakes as part of their learning journey.\n\nI hold a Master's degree in Applied Linguistics and am certified in TESOL/TEFL. I've worked with students from diverse cultural backgrounds, helping them achieve their language goals whether for academic purposes, career advancement, or personal enrichment.\n\nMy courses are interactive and tailored to each student's learning style and objectives. I believe in using real-world materials and practical scenarios to make language learning both effective and enjoyable.`,
     certificates: [
       {
         name: "Master\'s in Applied Linguistics",
@@ -157,13 +157,16 @@ const TeacherProfileDetail: React.FC = () => {
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="lg:col-span-12">
               {activeTab === "about" && <AboutTab teacher={teacher} />}
-              {activeTab === "courses" && <ClassesTab courses={courses} teacherId={teacher?.id} />}
+              {activeTab === "courses" && <CoursesTab courses={courses} teacherId={teacher?.id} />}
               {activeTab === "reviews" && (
                 <ReviewsTab
                   reviews={reviews}
                   overallRating={teacher?.rating}
                   ratingDistribution={ratingDistribution}
                 />
+              )}
+              {activeTab === "highlights" && (
+                <TeachingHighlightsManagement />
               )}
             </div>
           </div>
