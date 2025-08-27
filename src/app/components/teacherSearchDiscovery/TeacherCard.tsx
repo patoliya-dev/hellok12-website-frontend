@@ -97,7 +97,7 @@ const TeacherCard: React.FC<TeacherCardProps> = ({
   return (
     <Link
       href={`/teacher-profile-detail/${teacher?.id}`}
-      className="block bg-card border border-border rounded-educational hover:shadow-educational-lg transition-educational group hover-lift"
+      className="block bg-card border border-border rounded-lg hover:shadow-educational-lg transition-educational group hover-lift"
     >
       <div className="relative">
         {/* Profile Image */}

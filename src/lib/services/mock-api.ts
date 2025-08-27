@@ -6,7 +6,7 @@ import {
   getTeacherWithReviews,
   getClassWithTeacher,
   getClassWithReviews,
-} from "./data-service"
+} from "./teacher-service"
 
 // Simulate API delay
 const delay = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms))
