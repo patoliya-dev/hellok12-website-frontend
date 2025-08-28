@@ -16,9 +16,10 @@ interface FilterState {
 interface TeacherFiltersProps {
   filters: FilterState
   onFiltersChange: (filters: FilterState) => void
+  schoolSlug?: string[] | string
 }
 
-export default function TeacherFilters({ filters, onFiltersChange }: TeacherFiltersProps) {
+export default function TeacherFilters({ filters, onFiltersChange, schoolSlug }: TeacherFiltersProps) {
   const [localFilters, setLocalFilters] = useState<FilterState>(filters)
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function TeacherFilters({ filters, onFiltersChange }: TeacherFilt
       {/* Dropdown Filters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
         {/* School */}
-        <select
+        {!schoolSlug ? <select
           value={filters.school}
           onChange={(e) => handleChange("school", e.target.value)}
           className="w-full border rounded-lg px-4 py-2"
@@ -58,7 +59,7 @@ export default function TeacherFilters({ filters, onFiltersChange }: TeacherFilt
           <option value="">Select school</option>
           <option value="school1">School 1</option>
           <option value="school2">School 2</option>
-        </select>
+        </select> : null}
 
         {/* Languages */}
         <select
