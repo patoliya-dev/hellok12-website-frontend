@@ -4,14 +4,14 @@ import React from "react";
 import Icon from "../../components/ui/Icon";
 
 interface TabNavigationProps {
-  activeTab: "about" | "courses" | "reviews";
-  onTabChange: (tabId: "about" | "courses" | "reviews") => void;
+  activeTab: "about" | "courses" | "reviews" | "highlights";
+  onTabChange: (tabId: "about" | "courses" | "reviews" | "highlights") => void;
   classesBadgeCount?: number;
   reviewsBadgeCount?: number;
 }
 
 interface Tab {
-  id: "about" | "courses" | "reviews";
+  id: "about" | "courses" | "reviews" | "highlights";
   label: string;
   icon: string;
   badge?: number;
@@ -21,7 +21,8 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange, c
   const tabs: Tab[] = [
     { id: "about", label: "About", icon: "User" },
     { id: "courses", label: "Courses", icon: "BookOpen", badge: classesBadgeCount },
-    { id: "reviews", label: "Reviews", icon: "Star", badge: reviewsBadgeCount }
+    { id: "reviews", label: "Reviews", icon: "Star", badge: reviewsBadgeCount },
+    { id: "highlights", label: "Highlights", icon: "Clapperboard" }
   ];
 
   return (

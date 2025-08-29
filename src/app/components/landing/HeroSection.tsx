@@ -12,6 +12,10 @@ const HeroSection = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      // First trigger fade-out
+      setFade(false);
+
+      // After fade-out duration, change text and trigger fade-in
       setTimeout(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % languages.length);
         setFade(true); // Trigger fade-in
@@ -39,11 +43,11 @@ const HeroSection = () => {
           <div className="text-center lg:text-left">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-semibold text-foreground leading-tight mb-6">
               <span
-                className={`text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary inline-block transition-opacity duration-500 ${fade ? "opacity-100 animate-in fade-in" : "opacity-0 animate-out fade-out"
+                className={`text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary inline-block transition-opacity duration-500 transition delay-200 duration-400 ease-in-out ${fade ? "opacity-100" : "opacity-0"}
                   }`}
               >
                 {" "}
-                {languages[currentIndex]} |
+                {languages[currentIndex]}
               </span>
               {" "} Lessons for
               Kids with Expert Tutors

@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import forms from "@tailwindcss/forms";
+import aspectRatio from '@tailwindcss/aspect-ratio'
 import animate from "tailwindcss-animate";
 
 const config: Config = {
@@ -131,7 +132,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [forms, animate],
+  plugins: [forms, animate, aspectRatio],
 };
 
 export default config;
