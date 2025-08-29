@@ -38,8 +38,8 @@ const HeroSection = () => {
               Connecting kids with language teachers
             </p>
 
-            <p className="flex text-left bg-primary/20 border-border rounded-full text-primary mb-8 leading-relaxed">
-              <span className="text-xl sm:text-2xl p-2 leading-relaxed">
+            <p className="inline-flex text-left bg-primary/10 border-border rounded-full text-primary/80 mb-8 leading-relaxed">
+              <span className="lg:text-xl md:text-md sm:text-sm px-4 py-1 leading-relaxed">
                 Explore 200+ languages for your child to discover
               </span>
             </p>
