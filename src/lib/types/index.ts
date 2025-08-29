@@ -5,6 +5,9 @@ export type Teacher = {
   name: string
   title: string
   location: string
+  schoolSlug: string
+  schoolName: string
+  schoolLogo: string
   rating: number
   reviewCount: number
   hourlyRate: number

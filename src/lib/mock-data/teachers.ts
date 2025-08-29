@@ -4,6 +4,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-001",
     name: "María García",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -73,6 +76,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-002",
     name: "Pierre Dubois",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "Paris, France",
     rating: 4.8,
@@ -142,6 +148,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-003",
     name: "Sarah Martinez",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "English, Spanish & French Teacher",
     location: "New York, USA",
     rating: 4.8,
@@ -218,6 +227,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-004",
     name: "Sarah Martinez",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     profileImage: "/assets/images/teacher-profile.jpg", // Use local asset
     languages: ["English", "Spanish", "French"],
     rating: 4.8,
@@ -287,6 +299,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-005",
     name: "María García5",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -357,6 +372,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-006",
     name: "Pierre Dubois6",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "San Francisco, USA",
     rating: 4.8,
@@ -427,6 +445,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-007",
     name: "María García7",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -497,6 +518,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-008",
     name: "Pierre Dubois8",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "San Francisco, USA",
     rating: 4.8,
@@ -567,6 +591,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-009",
     name: "María García9",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -637,6 +664,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-010",
     name: "Pierre Dubois10",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "San Francisco, USA",
     rating: 4.8,
@@ -707,6 +737,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-011",
     name: "María García11",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -777,6 +810,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-012",
     name: "Pierre Dubois12",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "San Francisco, USA",
     rating: 4.8,
@@ -847,6 +883,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-013",
     name: "María García13",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -917,6 +956,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-014",
     name: "Pierre Dubois14",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "San Francisco, USA",
     rating: 4.8,
@@ -987,6 +1029,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-015",
     name: "María García15",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -1057,6 +1102,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-016",
     name: "Pierre Dubois16",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "San Francisco, USA",
     rating: 4.8,
@@ -1127,6 +1175,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-017",
     name: "María García17",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -1197,6 +1248,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-018",
     name: "Pierre Dubois18",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "San Francisco, USA",
     rating: 4.8,
@@ -1267,6 +1321,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-019",
     name: "María García19",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -1337,6 +1394,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-020",
     name: "Pierre Dubois20",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "San Francisco, USA",
     rating: 4.8,
@@ -1407,6 +1467,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-021",
     name: "María García21",
+    schoolSlug: "sunrise-academy",
+    schoolName: "Sunrise Academy",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "Native Spanish Teacher & Cultural Expert",
     location: "San Francisco, USA",
     rating: 4.9,
@@ -1477,6 +1540,9 @@ export const mockTeachers: Teacher[] = [
   {
     id: "teacher-022",
     name: "Pierre Dubois22",
+    schoolSlug: "paris-language-center",
+    schoolName: "Paris Language Center",
+    schoolLogo: "https://via.placeholder.com/80x80.png?text=Sunrise",
     title: "French Language Specialist",
     location: "San Francisco, USA",
     rating: 4.8,
