@@ -1,11 +1,13 @@
-"use client";
-import { NextResponse } from "next/server"
-import { mockSchools } from "@/lib/mock-data/schools"
+// File: src/app/api/schools/[schoolSlug]/route.ts
+import { NextResponse } from "next/server";
+import { mockSchools } from "@/lib/mock-data/schools";
+import { NextRequest } from "next/server";
 
-export async function GET(request: Request) {
-  // Extract schoolSlug from the URL
+export async function GET(request: NextRequest) {
+  // Extract the slug from the pathname
   const { pathname } = new URL(request.url);
-  const schoolSlug = pathname.split("/").pop();
+  const segments = pathname.split("/");
+  const schoolSlug = segments[segments.length - 1]; // last segment
 
   const school = mockSchools.find((s) => s.schoolSlug === schoolSlug);
 

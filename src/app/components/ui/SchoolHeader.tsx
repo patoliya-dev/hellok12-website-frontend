@@ -28,7 +28,7 @@ const SchoolHeader: React.FC<SchoolHeaderProps> = ({ schoolName, schoolLogo }) =
         <div className="flex items-center justify-between h-16">
           {/* Logo + Name */}
           <Link href={`/${schoolSlug || ""}`} className="flex items-center space-x-2">
-            <Image src={schoolLogo || "/assets/images/schoolLogo/Adrian_High_School.png"} alt={`${schoolName} Logo`} width={50} height={40} priority />
+            <Image src={schoolLogo || "/assets/images/schoolLogo/adrian-high-school.png"} alt={`${schoolName} Logo`} width={50} height={40} priority />
             <span className="text-lg font-semibold text-foreground">{schoolName}</span>
           </Link>
 

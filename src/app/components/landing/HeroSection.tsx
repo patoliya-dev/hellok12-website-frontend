@@ -2,28 +2,11 @@
 import { useRouter } from "next/navigation"
 import Button from "../ui/Button"
 import AppImage from "../ui/AppImage"
-import { useEffect, useState } from "react"
+import TypingText from "../ui/TypingText"
 
 const HeroSection = () => {
   const router = useRouter()
-  const languages = ["English", "Spanish", "French", "German", "Chinese", "Japanese"]; // Add as many as you like
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [fade, setFade] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // First trigger fade-out
-      setFade(false);
-
-      // After fade-out duration, change text and trigger fade-in
-      setTimeout(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % languages.length);
-        setFade(true); // Trigger fade-in
-      }, 500); // duration of fade-out
-    }, 2000); // Change language every 2 seconds
-
-    return () => clearInterval(interval);
-  }, [languages.length]);
+  const languages = ["English", "Spanish", "French", "German", "Chinese", "Japanese"];
 
   const handleFindTeacher = () => {
     router.push("/teacher-search-discovery")
@@ -38,23 +21,27 @@ const HeroSection = () => {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_1.5fr] lg:grid-cols-[3fr_2fr] gap-8 lg:gap-12 items-center">
           {/* Content */}
-          <div className="text-center lg:text-left">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-semibold text-foreground leading-tight mb-6">
-              <span
-                className={`text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary inline-block transition-opacity duration-500 transition delay-200 duration-400 ease-in-out ${fade ? "opacity-100" : "opacity-0"}
-                  }`}
-              >
-                {" "}
-                {languages[currentIndex]}
+          <div className="text-center lg:text-left md:text-left">
+            <h1 className="text-4xl sm:text-5xl lg:text-[50px] md:text-[38px] font-heading font-semibold text-foreground leading-tight">
+              <span className="lg:text-left md:text-left sm:text-center">
+                <TypingText texts={languages} speed={200} delay={1000} />
+                <span className="inline-block sm:block md:inline">Lessons for</span>
               </span>
-              {" "} Lessons for
+            </h1>
+            <h1 className="text-4xl sm:text-5xl lg:text-[50px] md:text-[38px] font-heading font-semibold text-foreground leading-tight mb-6">
               Kids with Expert Tutors
             </h1>
 
-            <p className="text-xl sm:text-2xl text-text-secondary mb-8 leading-relaxed">
-              Explore 200+ languages for your child to discover
+            <p className="text-3xl text-left md:text-2xl text-text-secondary mb-8 leading-relaxed">
+              Connecting kids with language teachers
+            </p>
+
+            <p className="flex text-left bg-primary/20 border-border rounded-full text-primary mb-8 leading-relaxed">
+              <span className="text-xl sm:text-2xl p-2 leading-relaxed">
+                Explore 200+ languages for your child to discover
+              </span>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
