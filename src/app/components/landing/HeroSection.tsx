@@ -34,11 +34,11 @@ const HeroSection = () => {
               Kids with Expert Tutors
             </h1>
 
-            <p className="text-3xl text-left md:text-2xl text-text-secondary mb-8 leading-relaxed">
+            <p className="text-3xl md:text-2xl text-text-secondary mb-8 leading-relaxed">
               Connecting kids with language teachers
             </p>
 
-            <p className="inline-flex text-left bg-primary/10 border-border rounded-full text-primary/80 mb-8 leading-relaxed">
+            <p className="inline-flex bg-primary/10 border-border rounded-full text-primary/80 mb-8 leading-relaxed">
               <span className="lg:text-xl md:text-md sm:text-sm px-4 py-1 leading-relaxed">
                 Explore 200+ languages for your child to discover
               </span>

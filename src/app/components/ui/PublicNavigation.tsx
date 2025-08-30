@@ -63,7 +63,7 @@ const PublicNavigation: React.FC = () => {
               <Link
                 key={item?.path}
                 href={item?.path}
-                className={`flex items-center space-x-1 px-3 py-2 rounded-educational text-sm font-medium transition-educational hover:bg-muted ${isActivePath(item?.path) ? "text-primary bg-primary/10" : "text-text-secondary hover:text-foreground"
+                className={`rounded-md flex items-center space-x-1 px-3 py-2 rounded-educational text-sm font-medium transition-educational hover:bg-muted ${isActivePath(item?.path) ? "text-primary bg-primary/10" : "text-text-secondary hover:text-foreground"
                   }`}
               >
                 {/* <Icon name={item?.icon} size={16} /> */}
