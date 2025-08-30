@@ -20,7 +20,7 @@ const LessonModal: React.FC<LessonModalProps> = ({
   lessons,
 }) => {
 
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(lessons[0]);
   const [filterType, setFilterType] = useState<string | number | (string | number)[]>('all');
 
   const teacherOptions = [
