@@ -10,6 +10,7 @@ import LessonList from '../../components/courseDetails/LessonList';
 import EnrollmentSection from '../../components/courseDetails/EnrollmentSection';
 import ReviewsSection from '../../components/courseDetails/ReviewsSection';
 import LessonModal from '../../components/courseDetails/LessonModal';
+import PageTitle from '@/app/components/PageTitle';
 
 // TypeScript types
 interface Instructor {
@@ -245,6 +246,9 @@ const PublicCourseDetails: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
+        {/* Page title */}
+        <PageTitle title={"Course details"} />
+
         <PublicNavigation />
         <div className="pt-18">
           <div className="max-w-6xl mx-auto px-6 py-8">

@@ -1,13 +1,13 @@
 "use client"
 import React from "react";
 import Head from "next/head";
-
-import Header from "../components/ui/PublicNavigation";
+import PublicNavigation from "../components/ui/PublicNavigation";
 import Icon from "../components/ui/Icon";
 import PricingCard from "../components/pricing/PricingCard";
 import TrustSignals from "../components/pricing/TrustSignals";
 import FooterSection from "../components/ui/FooterSection";
 import Faq from "../components/pricing/FaqSection";
+import PageTitle from "../components/PageTitle";
 
 // ---- Types ----
 interface Badge {
@@ -53,14 +53,10 @@ const PricingPlans: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Head>
-        <title>Pricing Plans - HelloK12 Educational Platform</title>
-        <meta
-          name="description"
-          content="Transparent pricing for HelloK12's educational games and tutoring services. Choose from flexible subscription plans for parents and commission-based options for teachers."
-        />
-      </Head>
-      <Header />
+      {/* Page title */}
+      <PageTitle title={"Pricing Plans"} />
+      
+      <PublicNavigation />
       <main className="pt-8">
         {/* Hero Section */}
         <section className="pt-22 pb-10">

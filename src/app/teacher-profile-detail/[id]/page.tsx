@@ -11,6 +11,7 @@ import ReviewsTab from "../../components/teacherProfileDetails/ReviewsTab";
 import { mockClasses, mockReviews } from "@/lib/mock-data";
 import type { Class, Review } from "../../../lib/types"
 import TeachingHighlightsManagement from "@/app/components/teachingHighlightsManagement";
+import PageTitle from "@/app/components/PageTitle";
 
 // Types
 interface Certificate {
@@ -136,6 +137,9 @@ const TeacherProfileDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Page title */}
+      <PageTitle title={"Teacher Profile"} />
+
       <PublicNavigation />
       <main className="pt-16 pb-20 lg:pb-8">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
