@@ -14,6 +14,7 @@ import { FilterState } from "../../teacher-search-discovery/page";
 import SchoolHeader from "@/app/components/ui/SchoolHeader";
 import { School } from "@/lib/mock-data/schools";
 import Loader from "@/app/components/ui/Loader";
+import PageTitle from "@/app/components/PageTitle";
 
 const itemsPerPage = 8;
 
@@ -117,9 +118,12 @@ const TeacherSearchDiscovery: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
+
       {loading ? (
         <Loader />   // Show loader while fetching/filtering
       ) : (<>
+        {/* Page title */}
+        <PageTitle title={"School teachers"} />
         <SchoolHeader schoolLogo={school?.schoolLogo} schoolName={school?.schoolName} />
 
         <main className="pt-16">

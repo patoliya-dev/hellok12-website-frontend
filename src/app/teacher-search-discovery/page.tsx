@@ -10,6 +10,7 @@ import TeacherFilters from "../components/teacherSearchDiscovery/TeacherFilter";
 import FooterSection from "../components/ui/FooterSection";
 import type { Teacher } from "../../lib/types"
 import { mockTeachers } from "@/lib/mock-data/teachers"
+import PageTitle from "../components/PageTitle";
 
 // export interface Teacher { id: number; name: string; title: string; location: string; languages: string[]; specialties: string[]; experience: number; availability: string[]; hourlyRate: number; rating: number; reviewCount: number; isVerified: boolean; isOnline: boolean; teachingStyle: string; profileImage: string; isFavorited: boolean; studentCount: number; }
 
@@ -163,6 +164,9 @@ const TeacherSearchDiscovery: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Page title */}
+      <PageTitle title={"Find Your Perfect Teacher"} />
+
       <PublicNavigation />
 
       <main className="pt-16">
