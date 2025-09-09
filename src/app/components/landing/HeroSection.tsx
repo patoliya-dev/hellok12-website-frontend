@@ -84,8 +84,9 @@ const HeroSection = () => {
           <div className="relative">
             <div className="relative z-10">
               <AppImage
-                src="/assets/images/heroSection/hero-illustration.png"
+                src="/assets/images/heroSection/hero-illustration.gif"
                 alt="Children learning languages with colorful books and global elements"
+                className="xl:max-w-[600px] lg:max-w-full md:max-w-full sm:max-w-full h-auto"
                 width={700}
                 height={700}
               />
