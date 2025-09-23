@@ -39,7 +39,7 @@ const PublicNavigation: React.FC = () => {
   }
 
   const handleAuthNavigation = (): void => {
-    window.location.href = "/authentication-login-register"
+    window.location.href = "https://dev-app.hellok12.com/login"
   }
 
   return (
