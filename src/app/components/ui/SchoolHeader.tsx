@@ -65,7 +65,7 @@ const SchoolHeader: React.FC<SchoolHeaderProps> = ({ schoolName, schoolLogo }) =
                 fullWidth
                 onClick={() => {
                   setIsMobileMenuOpen(false)
-                  handleAuthNavigation()
+                  handleAuthNavigation('signin')
                 }}
               >
                 Sign In
@@ -75,7 +75,7 @@ const SchoolHeader: React.FC<SchoolHeaderProps> = ({ schoolName, schoolLogo }) =
                 fullWidth
                 onClick={() => {
                   setIsMobileMenuOpen(false)
-                  handleAuthNavigation()
+                  handleAuthNavigation('signup')
                 }}
               >
                 Get Started
