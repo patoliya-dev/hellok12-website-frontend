@@ -10,7 +10,7 @@ const CallToActionSection: FC = () => {
   const router = useRouter();
 
   const handleGetStarted = () => {
-    router.push("/authentication-login-register");
+    router.push("/teacher-search-discovery");
   };
 
   const handleFindTeacher = () => {
