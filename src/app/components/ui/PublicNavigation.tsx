@@ -38,8 +38,8 @@ const PublicNavigation: React.FC = () => {
     setIsMobileMenuOpen(false)
   }
 
-  const handleAuthNavigation = (): void => {
-    window.location.href = "https://dev-app.hellok12.com/login"
+  const handleAuthNavigation = (path: string): void => {
+    window.location.href = `https://dev-app.hellok12.com/login#${path || ''}`
   }
 
   return (
@@ -74,10 +74,14 @@ const PublicNavigation: React.FC = () => {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            <Button variant="ghost" size="sm" onClick={handleAuthNavigation}>
+            <Button variant="ghost" size="sm" onClick={() => {
+              handleAuthNavigation('signin')
+            }}>
               Sign In
             </Button>
-            <Button variant="default" size="sm" onClick={handleAuthNavigation}>
+            <Button variant="default" size="sm" onClick={() => {
+              handleAuthNavigation('signup')
+            }}>
               Get Started
             </Button>
           </div>
@@ -117,7 +121,7 @@ const PublicNavigation: React.FC = () => {
                   fullWidth
                   onClick={() => {
                     closeMobileMenu()
-                    handleAuthNavigation()
+                    handleAuthNavigation('signin')
                   }}
                 >
                   Sign In
@@ -127,7 +131,7 @@ const PublicNavigation: React.FC = () => {
                   fullWidth
                   onClick={() => {
                     closeMobileMenu()
-                    handleAuthNavigation()
+                    handleAuthNavigation('signup')
                   }}
                 >
                   Get Started

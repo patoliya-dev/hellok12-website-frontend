@@ -18,8 +18,8 @@ const SchoolHeader: React.FC<SchoolHeaderProps> = ({ schoolName, schoolLogo }) =
   const { schoolSlug } = params || {}
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
-  const handleAuthNavigation = () => {
-    window.location.href = `/${schoolSlug || ""}/auth/login`
+  const handleAuthNavigation = (path: string) => {
+    window.location.href = `https://dev-app.hellok12.com/login#${path}`
   }
 
   return (
@@ -34,10 +34,14 @@ const SchoolHeader: React.FC<SchoolHeaderProps> = ({ schoolName, schoolLogo }) =
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            <Button variant="ghost" size="sm" onClick={handleAuthNavigation}>
+            <Button variant="ghost" size="sm" onClick={() => {
+              handleAuthNavigation('signin')
+            }}>
               Sign In
             </Button>
-            <Button variant="default" size="sm" onClick={handleAuthNavigation}>
+            <Button variant="default" size="sm" onClick={() => {
+              handleAuthNavigation('signup')
+            }}>
               Get Started
             </Button>
           </div>

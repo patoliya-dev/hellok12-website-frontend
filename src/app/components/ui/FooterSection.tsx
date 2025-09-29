@@ -29,7 +29,7 @@ const FooterSection: React.FC = () => {
       title: "Platform",
       links: [
         { label: "Find Teachers", path: "/teacher-search-discovery" },
-        { label: "Become a Teacher", path: "https://dev-app.hellok12.com/login/" },
+        { label: "Become a Teacher", path: "https://dev-app.hellok12.com/login#signup" },
         { label: "Pricing", path: "/pricing" },
       ],
     },
