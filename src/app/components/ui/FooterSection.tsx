@@ -174,12 +174,12 @@ const FooterSection: React.FC = () => {
 
             <div className="mt-4 lg:mt-0 flex items-center space-x-4 text-sm text-gray-400">
               <div className="flex items-center space-x-2">
-                <Link href="#privacy" className="hover:text-white transition-educational">
+                <Link href="/privacy-policy" className="hover:text-white transition-educational">
                   Privacy Policy
                 </Link>
               </div>
               <div className="flex items-center space-x-2">
-                <Link href="#terms" className="hover:text-white transition-educational">
+                <Link href="/terms-condition" className="hover:text-white transition-educational">
                   Terms of Service
                 </Link>
               </div>
