@@ -5,8 +5,8 @@ import Icon from "../ui/Icon";
 import Button from "../ui/Button";
 
 const CallToAction: React.FC = () => {
-  const handleNavigation = (path: string) => {
-    window.location.href = path;
+  const handleNavigation = (path: string, role?: string, userType?: string) => {
+    window.location.href = `https://dev-app.hellok12.com/login#${path}${role ? '|' + role : ''}${userType ? '|' + userType : ''}`;
   };
 
   return (
@@ -39,7 +39,7 @@ const CallToAction: React.FC = () => {
               <Button
                 variant="secondary"
                 size="lg"
-                onClick={() => handleNavigation("/register")}
+                onClick={() => handleNavigation("signup")}
                 iconName="ArrowRight"
                 iconPosition="right"
                 className="bg-white text-primary hover:bg-white/90"
@@ -114,7 +114,7 @@ const CallToAction: React.FC = () => {
             <Button
               variant="default"
               fullWidth
-              onClick={() => handleNavigation("/register")}
+              onClick={() => handleNavigation("signup", "student/parent", "student")}
               iconName="UserPlus"
               className="self-end"
               iconPosition="left"
@@ -156,7 +156,7 @@ const CallToAction: React.FC = () => {
             <Button
               variant="default"
               fullWidth
-              onClick={() => handleNavigation("/teacher-register")}
+              onClick={() => handleNavigation("signup", "teacher")}
               iconName="UserCheck"
               className="self-end"
               iconPosition="left"

@@ -34,7 +34,7 @@ const HeroSection: React.FC = () => {
               <Button
                 variant="default"
                 size="lg"
-                onClick={() => handleNavigation("/register")}
+                onClick={() => handleNavigation("https://dev-app.hellok12.com/login#signup")}
                 iconName="ArrowRight"
                 iconPosition="right"
               >
