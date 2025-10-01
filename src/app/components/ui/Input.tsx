@@ -1,6 +1,6 @@
 "use client";
 
-import React, { InputHTMLAttributes, forwardRef } from "react";
+import React, { InputHTMLAttributes, forwardRef, useId } from "react";
 import { cn } from "../../utils/cn";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -27,8 +27,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+    const generatedId = useId();
     // Generate unique ID if not provided
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const inputId = id || generatedId;
 
     // Base input classes
     const baseInputClasses =

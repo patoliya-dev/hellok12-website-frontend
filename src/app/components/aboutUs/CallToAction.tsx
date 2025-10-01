@@ -6,7 +6,7 @@ import Button from "../ui/Button";
 
 const CallToAction: React.FC = () => {
   const handleNavigation = (path: string, role?: string, userType?: string) => {
-    window.location.href = `https://dev-app.hellok12.com/login#${path}${role ? '|' + role : ''}${userType ? '|' + userType : ''}`;
+    window.location.href = `${path}${role ? '|' + role : ''}${userType ? '|' + userType : ''}`;
   };
 
   return (
@@ -39,10 +39,10 @@ const CallToAction: React.FC = () => {
               <Button
                 variant="secondary"
                 size="lg"
-                onClick={() => handleNavigation("signup")}
+                onClick={() => handleNavigation("https://dev-app.hellok12.com/login#signup")}
                 iconName="ArrowRight"
                 iconPosition="right"
-                className="bg-white text-primary hover:bg-white/90"
+                className="bg-white text-primary hover:bg-white/90 cursor-pointer"
               >
                 Start Learning Today
               </Button>
@@ -52,7 +52,7 @@ const CallToAction: React.FC = () => {
                 onClick={() => handleNavigation("/landing-how-it-works")}
                 iconName="Play"
                 iconPosition="left"
-                className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm"
+                className="border-white/20 text-white hover:bg-white/10 backdrop-blur-sm cursor-pointer"
               >
                 See How It Works
               </Button>
@@ -114,9 +114,9 @@ const CallToAction: React.FC = () => {
             <Button
               variant="default"
               fullWidth
-              onClick={() => handleNavigation("signup", "student/parent", "student")}
+              onClick={() => handleNavigation("https://dev-app.hellok12.com/login#signup", "student/parent", "student")}
               iconName="UserPlus"
-              className="self-end"
+              className="self-end cursor-pointer"
               iconPosition="left"
             >
               Sign Up as Student
@@ -156,9 +156,9 @@ const CallToAction: React.FC = () => {
             <Button
               variant="default"
               fullWidth
-              onClick={() => handleNavigation("signup", "teacher")}
+              onClick={() => handleNavigation("https://dev-app.hellok12.com/login#signup", "teacher")}
               iconName="UserCheck"
-              className="self-end"
+              className="self-end cursor-pointer"
               iconPosition="left"
             >
               Become a Teacher
@@ -183,6 +183,7 @@ const CallToAction: React.FC = () => {
               onClick={() => handleNavigation("/contact-us")}
               iconName="MessageSquare"
               iconPosition="left"
+              className="cursor-pointer"
             >
               Contact Support
             </Button>

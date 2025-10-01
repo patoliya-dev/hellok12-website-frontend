@@ -29,7 +29,7 @@ const FooterSection: React.FC = () => {
       title: "Platform",
       links: [
         { label: "Find Teachers", path: "/teacher-search-discovery" },
-        { label: "Become a Teacher", path: "https://dev-app.hellok12.com/login#signup" },
+        { label: "Become a Teacher", path: "https://dev-app.hellok12.com/login#signup|teacher" },
         { label: "Pricing", path: "/pricing" },
       ],
     },
@@ -42,11 +42,11 @@ const FooterSection: React.FC = () => {
   ]
 
   const socialLinks: SocialLink[] = [
-    { name: "Facebook", icon: "Facebook", url: "#facebook" },
-    { name: "Twitter", icon: "Twitter", url: "#twitter" },
-    { name: "Instagram", icon: "Instagram", url: "#instagram" },
-    { name: "YouTube", icon: "Youtube", url: "#youtube" },
-    { name: "LinkedIn", icon: "Linkedin", url: "#linkedin" },
+    { name: "Facebook", icon: "Facebook", url: "https://www.facebook.com/hellok12app" },
+    { name: "Twitter", icon: "Twitter", url: "https://x.com/hellok12app" },
+    { name: "Instagram", icon: "Instagram", url: "https://www.instagram.com/hellok12app/" },
+    { name: "YouTube", icon: "Youtube", url: "https://www.youtube.com/@hellok12" },
+    { name: "LinkedIn", icon: "Linkedin", url: "https://www.linkedin.com/company/hellok12" },
   ]
 
   const languages: string[] = [
