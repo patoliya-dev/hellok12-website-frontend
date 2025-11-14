@@ -7,10 +7,12 @@ import MediaModal from "@/app/components/teachingHighlightsManagement/MediaModal
 import { getLanguageName } from "@/lib/utils/utils";
 
 export interface TeacherMediaItem {
+  name: string;
   url: string;
-  name?: string;
-  mime: string;
-  createdAt?: string;
+  type?: string; // e.g., "image/png" or "video/mp4"
+  size?: number; // optional
+  createdAt?: string | Date;
+  mime?: string;
 }
 
 export interface TeacherHeroProps {
@@ -44,6 +46,7 @@ const TeacherHero: React.FC<TeacherHeroProps> = ({ teacher }) => {
     setModalItem({
       ...item,
       name: item?.name?.substring(item.name.indexOf("_") + 1) || item.name,
+      type: item?.mime,
     });
   };
 
@@ -169,7 +172,7 @@ const TeacherHero: React.FC<TeacherHeroProps> = ({ teacher }) => {
                 className="relative aspect-video max-w-lg w-full bg-muted cursor-pointer"
                 onClick={() => handleItemClick(teacher.intro!)}
               >
-                {teacher?.intro?.mime.startsWith("video") ? (
+                {teacher?.intro?.mime?.startsWith("video") ? (
                   <>
                     <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
                       <Icon
@@ -193,21 +196,21 @@ const TeacherHero: React.FC<TeacherHeroProps> = ({ teacher }) => {
                   />
                 )}
 
-                {/* MIME Label */}
+                {/* MIME? Label */}
                 <div className="absolute top-2 right-2">
                   <div
                     className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      teacher.intro.mime.startsWith("video")
+                      teacher.intro.mime?.startsWith("video")
                         ? "bg-primary text-primary-foreground"
                         : "bg-secondary text-secondary-foreground"
                     }`}
                   >
                     <Icon
-                      name={getFileIcon(teacher.intro.mime)}
+                      name={getFileIcon(teacher.intro.mime!)}
                       size={12}
                       className="inline mr-1"
                     />
-                    {teacher.intro.mime.split("/")[0].toUpperCase()}
+                    {teacher.intro.mime?.split("/")[0].toUpperCase()}
                   </div>
                 </div>
               </div>
