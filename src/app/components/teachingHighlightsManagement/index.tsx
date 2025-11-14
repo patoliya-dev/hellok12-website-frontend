@@ -1,146 +1,96 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import FilterTabs from './FilterTabs';
-import BulkActionsBar from './BulkActionsBar';
-import MediaGallery from './MediaGallery';
+import React, { useEffect, useState } from "react";
+import FilterTabs from "./FilterTabs";
+import BulkActionsBar from "./BulkActionsBar";
+import MediaGallery from "./MediaGallery";
 
-// Define TypeScript type for a media item
 export interface MediaItem {
-  id: number;
+  _id: string;
+  id?: string;
   name: string;
-  type: 'video' | 'image';
-  poster?: string; // For video thumbnails
   url: string;
-  size: number;
-  uploadDate: Date;
-  format: string;
+  mime: string;
+  size?: number;
+  createdAt?: string;
 }
 
-// Type for media filter counts
-interface MediaCounts {
-  all: number;
-  videos: number;
-  images: number;
+interface TeachingHighlightsManagementProps {
+  highlights: MediaItem[];
 }
 
-const TeachingHighlightsManagement: React.FC = () => {
+const TeachingHighlightsManagement: React.FC<
+  TeachingHighlightsManagementProps
+> = ({ highlights }) => {
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<MediaItem[]>([]);
-  const [activeFilter, setActiveFilter] = useState<'all' | 'videos' | 'images'>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedItems, setSelectedItems] = useState<(number | string)[]>([]);
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
-  // Mock data
-  const mockMediaItems: MediaItem[] = [
-    {
-      id: 1,
-      name: "Spanish Conversation Class - Beginner Level",
-      type: "video",
-      url: "https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_640x360.m4v",
-      size: 15728640,
-      uploadDate: new Date('2024-08-10T14:30:00'),
-      format: "mp4"
-    },
-    {
-      id: 2,
-      name: "Grammar Lesson Whiteboard",
-      type: "image",
-      url: "https://images.pixabay.com/photo/2017/05/13/12/40/fashion-2309519_1280.jpg",
-      size: 2097152,
-      uploadDate: new Date('2024-08-09T10:15:00'),
-      format: "jpg"
-    },
-    {
-      id: 3,
-      name: "Student Presentation - French Culture",
-      type: "video",
-      url: "https://images.unsplash.com/photo-1544717297-fa95b6ee9643",
-      size: 25165824,
-      uploadDate: new Date('2024-08-08T16:45:00'),
-      format: "mov"
-    },
-    {
-      id: 4,
-      name: "Vocabulary Cards Activity",
-      type: "image",
-      url: "https://images.pexels.com/photos/8471918/pexels-photo-8471918.jpeg",
-      size: 1572864,
-      uploadDate: new Date('2024-08-07T11:20:00'),
-      format: "png"
-    },
-    {
-      id: 5,
-      name: "Interactive Language Game Session",
-      type: "video",
-      url: "https://images.pixabay.com/photo/2015/07/17/22/43/student-849825_1280.jpg",
-      size: 18874368,
-      uploadDate: new Date('2024-08-06T13:10:00'),
-      format: "mp4"
-    },
-    {
-      id: 6,
-      name: "Classroom Setup for Group Work",
-      type: "image",
-      url: "https://images.unsplash.com/photo-1509062522246-3755977927d7",
-      size: 3145728,
-      uploadDate: new Date('2024-08-05T09:30:00'),
-      format: "jpg"
-    }
-  ];
-
-  // Load mock data
   useEffect(() => {
-    setMediaItems(mockMediaItems);
-  }, []);
+    setMediaItems(highlights);
+  }, [highlights]);
 
-  // Filter and search logic
+  // Filtering logic
   useEffect(() => {
     let filtered = mediaItems;
 
-    if (activeFilter === 'videos') filtered = filtered.filter(item => item.type === 'video');
-    if (activeFilter === 'images') filtered = filtered.filter(item => item.type === 'image');
+    if (activeFilter === "videos")
+      filtered = mediaItems.filter((i) => i.mime.startsWith("video"));
+
+    if (activeFilter === "images")
+      filtered = mediaItems.filter((i) => i.mime.startsWith("image"));
 
     if (searchQuery.trim()) {
-      filtered = filtered.filter(item =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter((i) =>
+        i.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     setFilteredItems(filtered);
   }, [mediaItems, activeFilter, searchQuery]);
 
-  // Item selection handlers
-  const handleItemSelect = (itemId: number | string) => {
-    setSelectedItems(prev =>
-      prev.includes(itemId) ? prev.filter(id => id !== itemId) : [...prev, itemId]
+  // Selections
+  const handleItemSelect = (id: string) => {
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
-  const handleSelectAll = () => setSelectedItems(filteredItems.map(item => item.id));
+  const handleSelectAll = () =>
+    setSelectedItems(filteredItems.map((item) => item._id));
+
   const handleDeselectAll = () => setSelectedItems([]);
-  const handleItemDelete = (itemId: number | string) => {
-    setMediaItems(prev => prev.filter(item => item.id !== itemId));
-    setSelectedItems(prev => prev.filter(id => id !== itemId));
+
+  const handleItemDelete = (id: string) => {
+    setMediaItems((prev) => prev.filter((item) => item._id !== id));
+    setSelectedItems((prev) => prev.filter((x) => x !== id));
   };
 
   const handleBulkDelete = () => {
     if (
-      window.confirm(`Are you sure you want to delete ${selectedItems.length} item${selectedItems.length !== 1 ? 's' : ''}?`)
+      confirm(
+        `Are you sure you want to delete ${selectedItems.length} item${
+          selectedItems.length !== 1 ? "s" : ""
+        }?`
+      )
     ) {
-      setMediaItems(prev => prev.filter(item => !selectedItems.includes(item.id)));
+      setMediaItems((prev) =>
+        prev.filter((item) => !selectedItems.includes(item._id))
+      );
       setSelectedItems([]);
     }
   };
 
-  const handleItemReplace = (itemId: number | string) => {
-    console.log('Replace item:', itemId);
+  const handleItemReplace = (id: string) => {
+    console.log("Replace item:", id);
   };
 
-  const mediaCounts: MediaCounts = {
+  const mediaCounts = {
     all: mediaItems.length,
-    videos: mediaItems.filter(item => item.type === 'video').length,
-    images: mediaItems.filter(item => item.type === 'image').length,
+    videos: mediaItems.filter((i) => i.mime.startsWith("video")).length,
+    images: mediaItems.filter((i) => i.mime.startsWith("image")).length,
   };
 
   return (
@@ -156,10 +106,10 @@ const TeachingHighlightsManagement: React.FC = () => {
       {selectedItems.length > 0 && (
         <BulkActionsBar
           selectedCount={selectedItems.length}
+          totalItems={filteredItems.length}
           onSelectAll={handleSelectAll}
           onDeselectAll={handleDeselectAll}
           onBulkDelete={handleBulkDelete}
-          totalItems={filteredItems.length}
         />
       )}
 

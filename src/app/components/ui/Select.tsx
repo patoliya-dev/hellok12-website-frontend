@@ -1,22 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useId } from "react";
+"use client";
+
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  ForwardedRef,
+  ChangeEvent,
+} from "react";
 import { ChevronDown, Check, Search, X } from "lucide-react";
-import { cn } from "../../utils/cn";
+import { cn } from "@/lib/utils/cn";
 import Button from "./Button";
 import Input from "./Input";
 
-type Option = {
+/* --------------------------------------------
+   Types
+---------------------------------------------*/
+
+export type SelectOption = {
   value: string | number;
-  label: string;
-  description?: string;
+  label: React.ReactNode;
   disabled?: boolean;
+  description?: string;
 };
 
-interface SelectProps {
+export interface SelectProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
-  options?: Option[];
-  value?: string | number | (string | number)[];
-  defaultValue?: string | number | (string | number)[];
+  options?: SelectOption[];
+  value?: any;
+  defaultValue?: any;
   placeholder?: string;
   multiple?: boolean;
   disabled?: boolean;
@@ -29,9 +42,13 @@ interface SelectProps {
   loading?: boolean;
   id?: string;
   name?: string;
-  onChange?: (value: string | number | (string | number)[]) => void;
+  onChange?: (value: any) => void;
   onOpenChange?: (isOpen: boolean) => void;
 }
+
+/* --------------------------------------------
+   Component — with forwardRef
+---------------------------------------------*/
 
 const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
   (
@@ -39,7 +56,6 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
       className,
       options = [],
       value,
-      defaultValue,
       placeholder = "Select an option",
       multiple = false,
       disabled = false,
@@ -52,37 +68,40 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
       loading = false,
       id,
       name,
-      onChange = () => {},
+      onChange,
       onOpenChange,
       ...props
     },
-    ref
+    ref: ForwardedRef<HTMLButtonElement>
   ) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-    const generatedId = useId();
-    // Generate unique ID if not provided
-    const selectId = id || generatedId;
+    const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-    // Filter options based on search
+    const selectId =
+      id || `select-${Math.random().toString(36).substring(2, 11)}`;
+
+    /** Filter options by search */
     const filteredOptions =
       searchable && searchTerm
         ? options.filter(
             (option) =>
-              option.label?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              (option.value &&
-                option.value
-                  .toString()
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase()))
+              option.label
+                ?.toString()
+                ?.toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
+              option.value
+                ?.toString()
+                ?.toLowerCase()
+                .includes(searchTerm.toLowerCase())
           )
         : options;
 
-    // Get selected option(s) for display
+    /** Selected label for display */
     const getSelectedDisplay = () => {
-      if (!value) return placeholder;
+      if (!value || value === "") return placeholder;
 
-      if (multiple && Array.isArray(value)) {
+      if (multiple) {
         const selectedOptions = options.filter((opt) =>
           value.includes(opt.value)
         );
@@ -91,76 +110,109 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
         return `${selectedOptions.length} items selected`;
       }
 
-      const selectedOption = options.find((opt) => opt.value === value);
-      return selectedOption ? selectedOption.label : placeholder;
+      const selected = options.find((opt) => opt.value === value);
+      return selected ? selected.label : placeholder;
     };
 
+    /** Toggle dropdown */
     const handleToggle = () => {
-      if (!disabled) {
-        const newIsOpen = !isOpen;
-        setIsOpen(newIsOpen);
-        onOpenChange?.(newIsOpen);
-        if (!newIsOpen) {
-          setSearchTerm("");
-        }
-      }
+      if (disabled) return;
+      const nextState = !isOpen;
+      setIsOpen(nextState);
+      onOpenChange?.(nextState);
+
+      if (!nextState) setSearchTerm("");
     };
 
-    const handleOptionSelect = (option: Option) => {
+    /** Selecting option */
+    const handleOptionSelect = (opt: SelectOption) => {
       if (multiple) {
-        const newValue = Array.isArray(value) ? value : [];
-        const updatedValue = newValue.includes(option.value)
-          ? newValue.filter((v) => v !== option.value)
-          : [...newValue, option.value];
-        onChange?.(updatedValue);
+        const arr = Array.isArray(value) ? [...value] : [];
+        const exists = arr.includes(opt.value);
+
+        const newValue = exists
+          ? arr.filter((v) => v !== opt.value)
+          : [...arr, opt.value];
+
+        onChange?.(newValue);
       } else {
-        onChange?.(option.value);
+        onChange?.(opt.value);
         setIsOpen(false);
         onOpenChange?.(false);
       }
     };
 
+    /** Clear selection */
     const handleClear = (e: React.MouseEvent) => {
       e.stopPropagation();
       onChange?.(multiple ? [] : "");
     };
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(e.target.value);
     };
 
-    const isSelected = (optionValue: string | number) => {
-      if (multiple && Array.isArray(value)) {
-        return value.includes(optionValue) || false;
-      }
-      return value === optionValue;
-    };
+    const isSelected = (val: any) =>
+      multiple ? value?.includes(val) : value === val;
 
     const hasValue = multiple
-      ? Array.isArray(value) && value.length > 0
+      ? value?.length > 0
       : value !== undefined && value !== "";
 
+    /** Close on outside click */
+    useEffect(() => {
+      const handleClick = (event: MouseEvent) => {
+        if (
+          wrapperRef.current &&
+          !wrapperRef.current.contains(event.target as Node)
+        ) {
+          setIsOpen(false);
+          setSearchTerm("");
+          onOpenChange?.(false);
+        }
+      };
+
+      const handleEsc = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          setIsOpen(false);
+          setSearchTerm("");
+          onOpenChange?.(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClick);
+      document.addEventListener("keydown", handleEsc);
+
+      return () => {
+        document.removeEventListener("mousedown", handleClick);
+        document.removeEventListener("keydown", handleEsc);
+      };
+    }, [onOpenChange]);
+
+    /* --------------------------------------------
+       JSX
+    ---------------------------------------------*/
+
     return (
-      <div className={cn("relative", className)}>
+      <div ref={wrapperRef} className={cn("relative", className)}>
         {label && (
           <label
             htmlFor={selectId}
-            className={cn(
-              "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block",
-              error ? "text-destructive" : "text-foreground"
-            )}
+            className="text-sm font-medium mb-2 block text-foreground"
           >
             {label}
             {required && <span className="text-destructive ml-1">*</span>}
           </label>
         )}
+
         <div className="relative">
+          {/* Trigger button */}
           <button
             ref={ref}
             id={selectId}
             type="button"
             className={cn(
-              "flex h-10 w-full items-center justify-between rounded-md border border-input bg-white text-black px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+              "flex h-10 w-full items-center justify-between rounded-md border border-[#E5E7EB] bg-white text-[#64748B] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50",
               error && "border-destructive focus:ring-destructive",
               !hasValue && "text-muted-foreground"
             )}
@@ -174,11 +226,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
 
             <div className="flex items-center gap-1">
               {loading && (
-                <svg
-                  className="animate-spin h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
                   <circle
                     className="opacity-25"
                     cx="12"
@@ -186,11 +234,13 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     r="10"
                     stroke="currentColor"
                     strokeWidth="4"
+                    fill="none"
                   />
                   <path
                     className="opacity-75"
                     fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 
+                      1.135 5.824 3 7.938l3-2.647z"
                   />
                 </svg>
               )}
@@ -215,25 +265,27 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             </div>
           </button>
 
-          {/* Hidden native select for form submission */}
+          {/* Hidden native select for forms */}
           <select
             name={name}
-            value={value as any}
-            onChange={() => {}} // Controlled by our custom logic
+            value={value || ""}
+            onChange={() => {}}
             className="sr-only"
             tabIndex={-1}
             multiple={multiple}
             required={required}
           >
             <option value="">Select...</option>
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+            {options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {typeof opt.label === "string"
+                  ? opt.label
+                  : String(opt.value ?? "")}
               </option>
             ))}
           </select>
 
-          {/* Dropdown */}
+          {/* Dropdown menu */}
           {isOpen && (
             <div className="absolute z-50 w-full mt-1 bg-white text-black border border-border rounded-md shadow-md">
               {searchable && (
@@ -242,9 +294,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       placeholder="Search options..."
+                      className="pl-8"
                       value={searchTerm}
                       onChange={handleSearchChange}
-                      className="pl-8"
                     />
                   </div>
                 </div>
@@ -256,26 +308,24 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     {searchTerm ? "No options found" : "No options available"}
                   </div>
                 ) : (
-                  filteredOptions.map((option) => (
+                  filteredOptions.map((opt) => (
                     <div
-                      key={option.value}
+                      key={opt.value}
                       className={cn(
-                        "relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
-                        isSelected(option.value) &&
+                        "flex cursor-pointer items-center rounded-sm px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground",
+                        isSelected(opt.value) &&
                           "bg-primary text-primary-foreground",
-                        option.disabled && "pointer-events-none opacity-50"
+                        opt.disabled && "pointer-events-none opacity-50"
                       )}
-                      onClick={() =>
-                        !option.disabled && handleOptionSelect(option)
-                      }
+                      onClick={() => !opt.disabled && handleOptionSelect(opt)}
                     >
-                      <span className="flex-1">{option.label}</span>
-                      {multiple && isSelected(option.value) && (
+                      <span className="flex-1">{opt.label}</span>
+                      {multiple && isSelected(opt.value) && (
                         <Check className="h-4 w-4" />
                       )}
-                      {option.description && (
+                      {opt.description && (
                         <span className="text-xs text-muted-foreground ml-2">
-                          {option.description}
+                          {opt.description}
                         </span>
                       )}
                     </div>
@@ -285,12 +335,12 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             </div>
           )}
         </div>
+
         {description && !error && (
           <p className="text-sm text-muted-foreground mt-1">{description}</p>
         )}
-        {error && (
-          <p className="text-sm text-destructive mt-1">{error}</p>
-        )}
+
+        {error && <p className="text-sm text-destructive mt-1">{error}</p>}
       </div>
     );
   }

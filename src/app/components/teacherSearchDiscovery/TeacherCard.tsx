@@ -1,52 +1,55 @@
 "use client";
-
 import React, { useState, MouseEvent } from "react";
 import Link from "next/link";
-import Image from "../../components/ui/AppImage";
-import NextImage from "next/image";
-import Icon from "../../components/ui/Icon";
+import AppImage from "@/app/components/ui/AppImage";
+import Icon from "@/app/components/ui/Icon";
+import { State } from "country-state-city";
+import { getLanguageName } from "@/lib/utils/utils";
 
-export interface Teacher {
-  id: string | number;
-  name: string;
-  title: string;
-  location: string;
-  profileImage: string;
+export type LocationShape = {
+  country?: string;
+  state?: string;
+  city?: string;
+};
+
+export type Teacher = {
+  _id?: string;
+  name?: string;
+  profileImage?: string;
   isOnline?: boolean;
-  isVerified?: boolean;
   isFavorited?: boolean;
-  rating: number;
-  reviewCount: number;
-  studentCount: number;
-  experience: number;
-  hourlyRate: number;
-  languages: string[];
-}
+  isVerified?: boolean;
+  reviewsCount?: number;
+  averageRating?: number;
+  profile?: {
+    teachingLanguages?: string[];
+    location?: LocationShape;
+    teachingSpecialties?: string;
+    yearsOfExperience?: number | null;
+  };
+  school?: {
+    name?: string;
+  } | null;
+  studentsTaught?: number | null;
+};
 
-interface TeacherCardProps {
+type Props = {
   teacher: Teacher;
-}
+};
 
-const TeacherCard: React.FC<TeacherCardProps> = ({
-  teacher
-}) => {
+const TeacherCard: React.FC<Props> = ({ teacher }) => {
   const [isFavorited, setIsFavorited] = useState<boolean>(
-    teacher?.isFavorited || false
+    teacher?.isFavorited ?? false
   );
 
-  const handleFavoriteToggle = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleFavoriteToggle = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsFavorited(!isFavorited);
+    setIsFavorited((s) => !s);
+    // TODO: call API to persist favorite change
   };
 
-  const handleBookingClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("Book lesson with", teacher?.name);
-  };
-
-  const renderRating = (rating: number) => {
+  const renderRating = (rating = 0) => {
     return (
       <div className="flex items-center space-x-1">
         <div className="flex items-center">
@@ -63,30 +66,42 @@ const TeacherCard: React.FC<TeacherCardProps> = ({
             />
           ))}
         </div>
-        <span className="text-sm font-medium text-foreground">{rating}</span>
-        <span className="text-sm text-text-secondary">
-          ({teacher?.reviewCount})
+        <span className="text-sm font-medium text-foreground">
+          {(Math.floor(rating * 10) / 10).toFixed(1)}
+        </span>
+        <span className="text-sm text-muted-foreground">
+          ({teacher?.reviewsCount ?? 0})
         </span>
       </div>
     );
   };
 
-  const renderLanguages = (languages: string[]) => {
-    const displayLanguages = languages?.slice(0, 3);
-    const remainingCount = languages?.length - 3;
+  const getFullLocationName = (location?: LocationShape) => {
+    if (!location) return "";
+    const { country, state, city } = location;
+    const stateName = state
+      ? State.getStateByCodeAndCountry(state, country as string)?.name
+      : "";
+    const cityName = city || "";
+    return [cityName, stateName].filter(Boolean).join(", ");
+  };
+
+  const renderLanguages = (languages?: string[]) => {
+    const displayLanguages = languages?.slice(0, 3) ?? [];
+    const remainingCount = Math.max(0, (languages?.length ?? 0) - 3);
 
     return (
       <div className="flex flex-wrap gap-1">
-        {displayLanguages?.map((lang, index) => (
+        {displayLanguages.map((lang, index) => (
           <span
             key={index}
-            className="inline-block bg-accent/10 text-accent px-2 py-1 rounded-educational text-xs font-medium"
+            className="inline-block bg-[#f59e0b]/10 text-[#f59e0b] px-2 py-1 rounded text-xs font-medium"
           >
-            {lang}
+            {getLanguageName(lang) || lang}
           </span>
         ))}
         {remainingCount > 0 && (
-          <span className="inline-block bg-muted text-text-secondary px-2 py-1 rounded-educational text-xs">
+          <span className="inline-block bg-muted text-muted-foreground px-2 py-1 rounded-educational text-xs">
             +{remainingCount} more
           </span>
         )}
@@ -96,27 +111,25 @@ const TeacherCard: React.FC<TeacherCardProps> = ({
 
   return (
     <Link
-      href={`/teacher-profile-detail/${teacher?.id}`}
+      href={`/teacher-profile-detail/${teacher?._id}`}
       className="block bg-card border border-border rounded-lg hover:shadow-educational-lg transition-educational group hover-lift"
     >
       <div className="relative">
-        {/* Profile Image */}
         <div className="relative p-6 pb-4">
           <div className="relative mx-auto w-24 h-24">
-            <Image
-              src={teacher?.profileImage}
-              alt={teacher?.name}
+            <AppImage
+              src={teacher?.profileImage ?? "/assets/images/no_image.png"}
+              alt={teacher?.name ?? "Teacher Profile Image"}
               className="w-full h-full rounded-full object-cover"
             />
             {teacher?.isOnline && (
-              <div className="absolute bottom-1 right-1 w-4 h-4 bg-accent border-2 border-white rounded-full"></div>
+              <div className="absolute bottom-1 right-1 w-4 h-4 bg-accent border-2 border-white rounded-full" />
             )}
           </div>
 
-          {/* Favorite Button */}
           <button
             onClick={handleFavoriteToggle}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/90 text-text-secondary hover:text-secondary hover:bg-white transition-educational"
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/90 text-muted-foreground hover:text-secondary hover:bg-white transition-educational"
             aria-label={
               isFavorited ? "Remove from favorites" : "Add to favorites"
             }
@@ -129,7 +142,6 @@ const TeacherCard: React.FC<TeacherCardProps> = ({
           </button>
         </div>
 
-        {/* Content */}
         <div className="px-6 pb-6">
           <div className="text-center mb-4">
             <div className="flex items-center justify-center space-x-1 mb-1">
@@ -137,41 +149,66 @@ const TeacherCard: React.FC<TeacherCardProps> = ({
                 {teacher?.name}
               </h3>
               {teacher?.isVerified && (
-                <Icon name="BadgeCheck" size={16} className="text-accent" />
+                <Icon name="BadgeCheck" size={16} className="text-secondary" />
               )}
             </div>
-            {/* Languages */}
-            <div className="mb-4 flex justify-center">{renderLanguages(teacher?.languages)}</div>
-            <p className="text-text-secondary text-sm mb-2 flex justify-center align-items-center font-semibold">
-              <NextImage
-                src="/assets/images/teacherCard/location-icon.png"
-                alt="HelloK12 Logo"
-                className="center mb-6 mr-1"
-                width={15}
-                height={15}
-                priority
-              />{teacher?.location}
+
+            <div className="mb-4 flex justify-center">
+              {renderLanguages(teacher?.profile?.teachingLanguages)}
+            </div>
+
+            {teacher?.profile?.location?.country && (
+              <p className="text-muted-foreground text-sm mb-2 flex items-center justify-center font-semibold">
+                <Icon name="MapPin" className="mr-1 flex-none" size={16} />
+                <span className="truncate max-w-full">
+                  {getFullLocationName(teacher?.profile?.location)}
+                </span>
+              </p>
+            )}
+
+            <p className="text-muted-foreground text-sm">
+              {teacher?.profile?.teachingSpecialties}
             </p>
-            <p className="text-text-secondary text-sm">{teacher?.title}</p>
           </div>
 
-          {/* Rating */}
           <div className="flex items-center justify-center mb-3">
-            {renderRating(teacher?.rating)}
+            {renderRating(teacher?.averageRating ?? 0)}
           </div>
 
-          {/* Languages */}
-          {/* <div className="mb-4">{renderLanguages(teacher?.languages)}</div> */}
+          <div className="flex items-center justify-center mb-4">
+            {teacher?.school ? (
+              <>
+                <Icon
+                  name="School"
+                  size={20}
+                  className="text-muted-foreground"
+                />
+                <span className="ml-2 text-sm text-muted-foreground">
+                  {teacher?.school?.name}
+                </span>
+              </>
+            ) : (
+              <>
+                <Icon
+                  name="UserRound"
+                  size={20}
+                  className="text-muted-foreground"
+                />
+                <span className="ml-2 text-sm text-muted-foreground">
+                  Independent Teacher
+                </span>
+              </>
+            )}
+          </div>
 
-          {/* Stats */}
-          <div className="flex items-center justify-center space-x-4 text-sm text-text-secondary mb-4">
+          <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground mb-4">
             <div className="flex items-center space-x-1">
               <Icon name="Users" size={14} />
-              <span>{teacher?.studentCount}</span>
+              <span>{teacher?.studentsTaught ?? 0}</span>
             </div>
             <div className="flex items-center space-x-1">
               <Icon name="Clock" size={14} />
-              <span>{teacher?.experience}y</span>
+              <span>{teacher?.profile?.yearsOfExperience ?? 0}y</span>
             </div>
           </div>
         </div>

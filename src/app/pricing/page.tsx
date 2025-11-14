@@ -1,6 +1,5 @@
 "use client"
 import React from "react";
-import Head from "next/head";
 import PublicNavigation from "../components/ui/PublicNavigation";
 import Icon from "../components/ui/Icon";
 import PricingCard from "../components/pricing/PricingCard";

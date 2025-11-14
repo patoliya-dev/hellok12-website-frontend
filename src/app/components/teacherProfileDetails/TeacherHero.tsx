@@ -1,87 +1,104 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "../ui/AppImage";
-import Icon from "../ui/Icon";
-import { MediaItem } from "../teachingHighlightsManagement";
-import MediaModal from "../teachingHighlightsManagement/MediaModal";
+import Image from "@/app/components/ui/AppImage";
+import Icon from "@/app/components/ui/Icon";
+import MediaModal from "@/app/components/teachingHighlightsManagement/MediaModal";
+import { getLanguageName } from "@/lib/utils/utils";
 
-// TypeScript types
-interface Teacher {
-  id: string;
-  name: string;
-  profileImage: string;
-  languages: string[];
-  rating: number;
-  reviewCount: number;
-  isOnline: boolean;
-  isVerified: boolean;
-  nextAvailable?: string;
-  experience: number;
-  studentsCount: number;
-  classesCount: number;
+export interface TeacherMediaItem {
+  url: string;
+  name?: string;
+  mime: string;
+  createdAt?: string;
 }
 
-interface TeacherHeroProps {
-  teacher: Teacher;
+export interface TeacherHeroProps {
+  teacher: {
+    name?: string;
+    profileImage?: string;
+    isVerified?: boolean;
+    isOnline?: boolean;
+    nextAvailable?: string;
+    averageRating?: number;
+    reviewsCount?: number;
+    studentsTaught?: number;
+    availableCoursesCount?: number;
+    intro?: TeacherMediaItem;
+    profile?: {
+      teachingLanguages?: string[];
+      yearsOfExperience?: number;
+    };
+  };
 }
 
 const TeacherHero: React.FC<TeacherHeroProps> = ({ teacher }) => {
-  const [modalItem, setModalItem] = useState<MediaItem | null>(null);
+  const [modalItem, setModalItem] = useState<TeacherMediaItem | null>(null);
 
-  const previewItem: MediaItem = {
-    id: 6,
-    name: "Classroom Setup for Group Work",
-    type: "video",
-    poster: "https://images.unsplash.com/photo-1509062522246-3755977927d7",
-    url: "https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_640x360.m4v",
-    size: 3145728,
-    uploadDate: new Date('2024-08-05T09:30:00'),
-    format: "jpg"
-  }
-
-  const getFileIcon = (type: 'video' | 'image') => {
-    return type === 'video' ? 'Video' : 'Image';
+  const getFileIcon = (mime: string) => {
+    return mime.startsWith("video") ? "Video" : "Image";
   };
 
-  const getAvailabilityStatus = () => {
-    if (teacher?.isOnline) {
-      return { text: "Available Now", color: "text-success", bgColor: "bg-success/10" };
-    } else if (teacher?.nextAvailable) {
-      return { text: `Next available: ${teacher.nextAvailable}`, color: "text-warning", bgColor: "bg-warning/10" };
-    }
-    return { text: "Offline", color: "text-text-secondary", bgColor: "bg-muted" };
+  const handleItemClick = (item: TeacherMediaItem) => {
+    if (!item) return;
+    setModalItem({
+      ...item,
+      name: item?.name?.substring(item.name.indexOf("_") + 1) || item.name,
+    });
   };
 
-  const availability = getAvailabilityStatus();
+  const handleModalClose = () => setModalItem(null);
 
-  const handleItemClick = (item: MediaItem) => {
-    setModalItem(item);
-  };
+  const renderRating = () => {
+    const rating = teacher?.averageRating ?? 0;
 
-  const handleModalClose = () => {
-    setModalItem(null);
+    return (
+      <div className="flex items-center justify-center lg:justify-start gap-1">
+        <div className="flex">
+          {[...Array(5)].map((_, i) => (
+            <Icon
+              key={i}
+              name="Star"
+              size={16}
+              className={
+                i < Math.floor(rating)
+                  ? "text-secondary fill-current"
+                  : "text-muted-foreground"
+              }
+            />
+          ))}
+        </div>
+
+        <span className="text-sm font-medium text-foreground">
+          {(Math.floor(rating * 10) / 10).toFixed(1)}
+        </span>
+
+        <span className="text-sm text-muted-foreground">
+          ({teacher?.reviewsCount ?? 0} reviews)
+        </span>
+      </div>
+    );
   };
 
   return (
     <div className="bg-card border-b border-border">
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6 lg:py-8">
         <div className="flex flex-col lg:flex-row justify-between gap-6">
-
-          {/* Left: Profile & Info */}
+          {/* LEFT SECTION */}
           <div className="flex flex-col lg:flex-row lg:items-start gap-6 flex-1">
             {/* Profile Image */}
             <div className="flex justify-center lg:justify-start">
               <div className="relative">
                 <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 border-primary/20">
                   <Image
-                    src={teacher.profileImage}
-                    alt={`${teacher.name} profile picture`}
+                    src={teacher?.profileImage || "/assets/images/no_image.png"}
+                    alt={teacher?.name || "Teacher Image"}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                {teacher.isVerified && (
-                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-success rounded-full flex items-center justify-center border-2 border-card">
+
+                {teacher?.isVerified && (
+                  <div className="absolute -bottom-1 right-3 w-8 h-8 bg-accent rounded-full flex items-center justify-center border-2 border-card">
                     <Icon name="CheckCircle" size={16} color="white" />
                   </div>
                 )}
@@ -90,119 +107,122 @@ const TeacherHero: React.FC<TeacherHeroProps> = ({ teacher }) => {
 
             {/* Teacher Info */}
             <div className="flex-1 text-center lg:text-left">
-
               <div className="mb-4">
-                <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-2">{teacher.name}</h1>
+                <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-2">
+                  {teacher?.name}
+                </h1>
 
+                {/* Teaching Languages */}
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-3">
-                  {teacher.languages.map((language, index) => (
+                  {teacher?.profile?.teachingLanguages?.map((lang, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full"
+                      className="px-3 py-1 bg-[#2563eb]/10 text-[#2563eb] text-sm font-medium rounded-full"
                     >
-                      {language}
+                      {getLanguageName(lang) || lang}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex items-center justify-center lg:justify-start gap-4 mb-3">
-                  <div className="flex items-center gap-1">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Icon
-                          key={i}
-                          name="Star"
-                          size={16}
-                          className={i < Math.floor(teacher.rating) ? "text-warning fill-current text-secondary" : "text-border text-secondary"}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm font-medium text-foreground">{teacher.rating}</span>
-                    <span className="text-sm text-text-secondary">({teacher.reviewCount} reviews)</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-center lg:justify-start">
-                  <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${availability.bgColor}`}>
-                    <div
-                      className={`w-2 h-2 rounded-full ${teacher.isOnline ? "bg-success" : "bg-text-secondary"}`}
-                    />
-                    <span className={`text-sm font-medium ${availability.color}`}>{availability.text}</span>
-                  </div>
+                {/* Rating */}
+                <div className="flex items-center justify-center lg:justify-start mb-3">
+                  {renderRating()}
                 </div>
               </div>
 
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-4 mb-6 lg:max-w-md">
                 <div className="text-center">
-                  <div className="text-lg font-bold text-foreground">{teacher.experience}</div>
-                  <div className="text-xs text-text-secondary">Years Experience</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg font-bold text-foreground">{teacher.studentsCount}</div>
-                  <div className="text-xs text-text-secondary">Students Taught</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg font-bold text-foreground">{teacher.classesCount}</div>
-                  <div className="text-xs text-text-secondary">Classes Available</div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Right: Video Preview */}
-          <div className="flex justify-center lg:justify-end lg:flex-1">
-            <div
-              className="relative aspect-video max-w-lg w-full bg-muted cursor-pointer"
-              onClick={() => handleItemClick(previewItem)}
-            >
-              {previewItem.type === 'video' ? (
-                <>
-                  <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                    <Icon name="Play" size={24} className="text-primary ml-1" />
+                  <div className="text-lg font-bold text-foreground">
+                    {teacher?.profile?.yearsOfExperience ?? 0}
                   </div>
-                  <video
-                    src={previewItem.url}
-                    poster="/path/to/preview-image.jpg"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    muted
-                  // controls
-                  />
-                </>
-              ) : (
-                <Image
-                  src={previewItem.url}
-                  alt={previewItem.name}
-                  className="w-full h-full object-cover"
-                />
-              )}
+                  <div className="text-xs text-muted-foreground">
+                    Years Experience
+                  </div>
+                </div>
 
-              <div className="absolute top-2 right-2">
-                <div className={`px-2 py-1 rounded-full text-xs font-medium ${previewItem.type === 'video'
-                  ? 'bg-primary/90 text-primary-foreground'
-                  : 'bg-secondary/90 text-secondary-foreground'}
-                  `}
-                >
-                  <Icon name={getFileIcon(previewItem.type)} size={12} className="inline mr-1" />
-                  {previewItem.type.toUpperCase()}
+                <div className="text-center">
+                  <div className="text-lg font-bold text-foreground">
+                    {teacher?.studentsTaught ?? 0}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Students Taught
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <div className="text-lg font-bold text-foreground">
+                    {teacher?.availableCoursesCount ?? 0}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Courses Available
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* RIGHT SECTION — Intro Video/Image */}
+          <div className="flex justify-center lg:justify-end lg:flex-1">
+            {teacher?.intro && (
+              <div
+                className="relative aspect-video max-w-lg w-full bg-muted cursor-pointer"
+                onClick={() => handleItemClick(teacher.intro!)}
+              >
+                {teacher?.intro?.mime.startsWith("video") ? (
+                  <>
+                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                      <Icon
+                        name="Play"
+                        size={24}
+                        className="text-primary ml-1"
+                      />
+                    </div>
+
+                    <video
+                      src={teacher?.intro?.url}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      muted
+                    />
+                  </>
+                ) : (
+                  <Image
+                    src={teacher?.intro?.url}
+                    alt={teacher?.intro?.name || "Media"}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+
+                {/* MIME Label */}
+                <div className="absolute top-2 right-2">
+                  <div
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      teacher.intro.mime.startsWith("video")
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-secondary-foreground"
+                    }`}
+                  >
+                    <Icon
+                      name={getFileIcon(teacher.intro.mime)}
+                      size={12}
+                      className="inline mr-1"
+                    />
+                    {teacher.intro.mime.split("/")[0].toUpperCase()}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Modal */}
       {modalItem && (
         <MediaModal
           item={modalItem}
           onClose={handleModalClose}
-          onDelete={() => {
-            handleModalClose();
-          }}
-          onReplace={() => {
-            handleModalClose();
-          }}
+          onDelete={handleModalClose}
+          onReplace={handleModalClose}
         />
       )}
     </div>

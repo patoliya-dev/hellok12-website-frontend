@@ -1,144 +1,131 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from 'react';
-import Icon from '../ui/Icon';
-import Button from '../ui/Button';
-import Select from '../ui/Select';
-import CourseCard from './CourseCard';
+import React, { useState } from "react";
+import Icon from "@/app/components/ui/Icon";
+import Button from "@/app/components/ui/Button";
+import Select from "@/app/components/ui/Select";
+import CourseCard, { CourseItem } from "./CourseCard";
 
-// Define types for class item and props
-interface ClassItem {
-  id: string | number;
-  title: string;
-  type: '1-on-1' | 'Group';
-  price: number;
-  duration: number;
-  enrolledStudents?: number;
-  maxStudents?: number;
-  schedule?: {
-    days?: string[];
-    time?: string;
-  };
-  location?: string;
-  nextSession?: string;
-  description?: string;
+export interface CoursesTabProps {
+  courses?: CourseItem[];
 }
 
-interface ClassesTabProps {
-  courses: ClassItem[];
-  teacherId: string | number;
-}
-
-const ClassesTab: React.FC<ClassesTabProps> = ({ courses, teacherId }) => {
-  // Type state as string | number | array to match Select onChange type
-  const [sortBy, setSortBy] = useState<string | number | (string | number)[]>('price-low');
-  const [filterType, setFilterType] = useState<string | number | (string | number)[]>('all');
+const CoursesTab: React.FC<CoursesTabProps> = ({ courses = [] }) => {
+  // Sorting & Filtering
+  const [sortBy, setSortBy] = useState<string>("price-low");
+  const [filterType, setFilterType] = useState<string>("all");
 
   const sortOptions = [
-    { value: 'price-low', label: 'Price: Low to High' },
-    { value: 'price-high', label: 'Price: High to Low' },
-    { value: 'duration', label: 'Duration' },
-    { value: 'popularity', label: 'Most Popular' },
+    { value: "price-low", label: "Price: Low to High" },
+    { value: "price-high", label: "Price: High to Low" },
+    { value: "popularity", label: "Most Popular" },
   ];
 
   const typeOptions = [
-    { value: 'all', label: 'All Classes' },
-    { value: '1-on-1', label: '1-on-1 Classes' },
-    { value: 'Group', label: 'Group Classes' },
+    { value: "all", label: "All Courses" },
+    { value: "1-on-1", label: "1-on-1 Courses" },
+    { value: "group", label: "Group Courses" },
   ];
 
-  const filteredAndSortedClasses = (): ClassItem[] => {
-    let filtered = courses;
+  const filteredAndSortedCourses = () => {
+    let filtered = [...(courses ?? [])];
 
     // Filter by type
-    if (filterType !== 'all') {
-      filtered = filtered?.filter(cls => cls?.type === filterType);
+    if (filterType !== "all") {
+      filtered = filtered.filter((c) => c?.lessonType === filterType);
     }
 
-    // Sort courses
-    return filtered?.sort((a, b) => {
+    // Sorting
+    return filtered.sort((a, b) => {
+      if (!a || !b) return 0;
+
       switch (sortBy) {
-        case 'price-low':
-          return a?.price - b?.price;
-        case 'price-high':
-          return b?.price - a?.price;
-        case 'duration':
-          return a?.duration - b?.duration;
-        case 'popularity':
-          return (b?.enrolledStudents || 0) - (a?.enrolledStudents || 0);
+        case "price-low":
+          return (a.price ?? 0) - (b.price ?? 0);
+
+        case "price-high":
+          return (b.price ?? 0) - (a.price ?? 0);
+
+        case "popularity":
+          return (b.enrolledCount ?? 0) - (a.enrolledCount ?? 0);
+
         default:
           return 0;
       }
     });
   };
 
-  const processedClasses = filteredAndSortedClasses();
+  const processedCourses = filteredAndSortedCourses();
 
   return (
     <div className="space-y-6">
-      {/* Filter and Sort Controls */}
+      {/* Filter & Sort Controls */}
       <div className="flex flex-col sm:flex-row gap-4 p-4 bg-muted/30 rounded-lg">
         <div className="flex-1">
           <Select
             label="Filter by Type"
             options={typeOptions}
             value={filterType}
-            onChange={(value: any) => setFilterType(value as string)}
+            onChange={(value) => setFilterType(value as string)}
             className="w-full"
           />
         </div>
+
         <div className="flex-1">
           <Select
             label="Sort by"
             options={sortOptions}
             value={sortBy}
-            onChange={(value: any) => setSortBy(value as string)}
+            onChange={(value) => setSortBy(value as string)}
             className="w-full"
           />
         </div>
       </div>
 
-      {/* Classes Summary */}
+      {/* Summary */}
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold text-foreground">
-            Available Classes ({processedClasses?.length})
+            Available Courses ({processedCourses?.length})
           </h3>
-          <p className="text-sm text-text-secondary">
-            Choose from individual or group learning options
+          <p className="text-sm text-muted-foreground">
+            Choose from 1-on-1 or group learning options
           </p>
         </div>
       </div>
 
-      {/* Classes Grid */}
-      {processedClasses?.length > 0 ? (
+      {/* Courses Grid */}
+      {processedCourses?.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2">
-          {processedClasses?.map((courseItem) => (
+          {processedCourses.map((course) => (
             <CourseCard
-              key={courseItem?.id}
+              key={course._id}
               courseItem={{
-                ...courseItem,
-                id: courseItem.id.toString(),   // Convert id to string for CourseCard
+                ...course,
+                id: course._id?.toString() ?? course.id.toString(),
               }}
-              teacherId={teacherId.toString()}
             />
           ))}
         </div>
       ) : (
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-            <Icon name="BookOpen" size={24} className="text-text-secondary" />
+            <Icon name="BookOpen" size={24} className="text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-medium text-foreground mb-2">No Classes Found</h3>
-          <p className="text-text-secondary mb-4">
+
+          <h3 className="text-lg font-medium text-foreground mb-2">
+            No Classes Found
+          </h3>
+
+          <p className="text-muted-foreground mb-4">
             No courses match your current filter criteria.
           </p>
+
           <Button
             variant="outline"
             onClick={() => {
-              setFilterType('all');
-              setSortBy('price-low');
+              setFilterType("all");
+              setSortBy("price-low");
             }}
           >
             Clear Filters
@@ -149,4 +136,4 @@ const ClassesTab: React.FC<ClassesTabProps> = ({ courses, teacherId }) => {
   );
 };
 
-export default ClassesTab;
+export default CoursesTab;

@@ -1,38 +1,19 @@
 "use client";
-
 import React from "react";
-import TeacherCard from "./TeacherCard";
+import TeacherCard, { Teacher } from "./TeacherCard";
 import TeacherCardSkeleton from "./TeacherCardSkeleton";
 
-// Teacher type (adjust based on your real data shape)
-export interface Teacher {
-  id: string | number;
-  name: string;
-  title: string;
-  location: string;
-  profileImage: string;
-  languages: string[];
-  specialties: string[];
-  experience: number;
-  availability: string[];
-  hourlyRate: number;
-  rating: number;
-  studentCount: number;
-  reviewCount: number;
-  // Add any other fields your teacher object contains
-}
+type Props = {
+  teachers?: Teacher[] | null;
+  loading?: boolean;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
+};
 
-interface TeacherGridProps {
-  teachers: Teacher[];
-  loading: boolean;
-  hasMore: boolean;
-  onLoadMore: () => void;
-}
-
-const TeacherGrid: React.FC<TeacherGridProps> = ({
+const TeacherGrid: React.FC<Props> = ({
   teachers,
-  loading,
-  hasMore,
+  loading = false,
+  hasMore = false,
   onLoadMore,
 }) => {
   const renderSkeletons = () => {
@@ -41,22 +22,24 @@ const TeacherGrid: React.FC<TeacherGridProps> = ({
     ));
   };
 
-  if (loading && teachers?.length === 0) {
+  const isEmpty = !teachers || teachers.length === 0;
+
+  // Show skeletons on initial load
+  if (loading && isEmpty) {
     return (
-      <div
-        className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"}
-      >
+      <div className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"}>
         {renderSkeletons()}
       </div>
     );
   }
 
-  if (teachers?.length === 0) {
+  // Show empty state only when not loading and no results
+  if (!loading && isEmpty) {
     return (
       <div className="text-center py-12">
         <div className="w-24 h-24 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
           <svg
-            className="w-12 h-12 text-text-secondary"
+            className="w-12 h-12 text-muted-foreground"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -72,7 +55,7 @@ const TeacherGrid: React.FC<TeacherGridProps> = ({
         <h3 className="text-lg font-heading font-semibold text-foreground mb-2">
           No teachers found
         </h3>
-        <p className="text-text-secondary max-w-md mx-auto">
+        <p className="text-muted-foreground max-w-md mx-auto">
           Try adjusting your search criteria or filters to find more teachers
           that match your needs.
         </p>
@@ -82,25 +65,18 @@ const TeacherGrid: React.FC<TeacherGridProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Teachers Grid/List */}
-      <div
-        className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"}
-      >
+      <div className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"}>
         {teachers?.map((teacher) => (
-          <TeacherCard key={teacher?.id} teacher={teacher} />
+          <TeacherCard key={teacher?._id} teacher={teacher} />
         ))}
       </div>
 
-      {/* Loading More */}
-      {loading && teachers?.length > 0 && (
-        <div
-          className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"}
-        >
+      {loading && Array.isArray(teachers) && teachers.length > 0 && (
+        <div className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"}>
           {renderSkeletons()}
         </div>
       )}
 
-      {/* Load More Button */}
       {hasMore && !loading && (
         <div className="text-center pt-8">
           <button
@@ -125,12 +101,9 @@ const TeacherGrid: React.FC<TeacherGridProps> = ({
         </div>
       )}
 
-      {/* End of Results */}
-      {!hasMore && teachers?.length > 0 && (
+      {!hasMore && Array.isArray(teachers) && teachers.length > 0 && (
         <div className="text-center pt-8 pb-4">
-          <p className="text-text-secondary">
-            {`You've seen all ${teachers?.length} teachers matching your criteria`}
-          </p>
+          <p className="text-muted-foreground">{`You've seen all ${teachers.length} teachers matching your criteria`}</p>
         </div>
       )}
     </div>

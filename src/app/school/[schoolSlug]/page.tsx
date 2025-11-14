@@ -133,7 +133,7 @@ const TeacherSearchDiscovery: React.FC = () => {
             <h1 className="text-3xl sm:text-4xl font-heading font-bold text-foreground mb-4">
               {schoolSlug ? `${school?.schoolName || schoolSlug} Teachers` : "Find Your Perfect Language Teacher"}
             </h1>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {"Connect with qualified instructors from around the world. Choose from 200+ languages and find the perfect match for your child's learning journey."}
             </p>
           </div>
@@ -154,7 +154,7 @@ const TeacherSearchDiscovery: React.FC = () => {
           </div>
 
           {showFilters && (
-            <TeacherFilters filters={filters} schoolSlug={schoolSlug} onFiltersChange={(value: any) => handleFilterChange(value)} />
+            <TeacherFilters filters={filters} schoolSlug={schoolSlug as string} onFiltersChange={(value: any) => handleFilterChange(value)} />
           )}
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 my-8">

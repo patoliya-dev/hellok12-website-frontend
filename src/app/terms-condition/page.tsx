@@ -1,7 +1,6 @@
 import PublicNavigation from "../components/ui/PublicNavigation"
 import FooterSection from "../components/ui/FooterSection"
 import PageTitle from "../components/PageTitle";
-import PrivacyPolicy from "../components/privacyPolicy";
 import TermsOfService from "../components/termsOfService";
 
 export default function ContactUs() {

@@ -1,44 +1,24 @@
 "use client";
 
-import React from 'react';
-import Icon from '../ui/Icon';
-import Image from '../ui/AppImage';
-import Button from '../ui/Button';
-import { MediaItem } from './MediaGallery'; // Reuse MediaItem type
+import React from "react";
+import Icon from "@/app/components/ui/Icon";
+import Image from "@/app/components/ui/AppImage";
+import Button from "@/app/components/ui/Button";
 
-interface MediaModalProps {
-  item: MediaItem;
+export interface MediaModalProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  item: any;
   onClose: () => void;
   onDelete: () => void;
   onReplace: () => void;
 }
 
-const MediaModal: React.FC<MediaModalProps> = ({ item, onClose, onDelete, onReplace }) => {
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+const MediaModal: React.FC<MediaModalProps> = ({ item, onClose }) => {
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onClose();
   };
 
-  const formatDate = (date: string | Date) => {
-    const d = typeof date === 'string' ? new Date(date) : date;
-    return d.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
+  const isVideo = item.type.startsWith("video");
 
   return (
     <div
@@ -49,42 +29,34 @@ const MediaModal: React.FC<MediaModalProps> = ({ item, onClose, onDelete, onRepl
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
           <div className="flex items-center space-x-3">
-            <div className={`
-              w-8 h-8 rounded-full flex items-center justify-center
-              ${item.type === 'video' ? 'bg-primary/20 text-primary' : 'bg-secondary/20 text-secondary'}
-            `}>
-              <Icon name={item.type === 'video' ? 'Video' : 'Image'} size={16} />
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                isVideo
+                  ? "bg-primary/20 text-primary"
+                  : "bg-secondary/20 text-secondary"
+              }`}
+            >
+              <Icon name={isVideo ? "Video" : "Image"} size={16} />
             </div>
-            <div>
-              <h3 className="font-semibold text-foreground">{item.name}</h3>
-              <p className="text-sm text-muted-foreground">
-                {formatFileSize(item.size)} • Uploaded {formatDate(item.uploadDate)}
-              </p>
-            </div>
+
+            <h3 className="font-semibold text-foreground">{item.name}</h3>
           </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground"
-          >
+          <Button variant="ghost" size="icon" onClick={onClose}>
             <Icon name="X" size={20} />
           </Button>
         </div>
 
-        {/* Media Content */}
+        {/* Body */}
         <div className="p-4">
           <div className="bg-muted rounded-lg overflow-hidden">
-            {item.type === 'video' ? (
+            {isVideo ? (
               <video
                 src={item.url}
                 controls
-                className="w-full max-h-[60vh] object-contain"
                 autoPlay
-              >
-                Your browser does not support the video tag.
-              </video>
+                className="w-full max-h-[60vh] object-contain"
+              />
             ) : (
               <div className="flex items-center justify-center min-h-[300px]">
                 <Image
@@ -94,14 +66,6 @@ const MediaModal: React.FC<MediaModalProps> = ({ item, onClose, onDelete, onRepl
                 />
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center justify-between p-4 border-t border-border bg-muted/30">
-          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-            <Icon name="Calendar" size={16} />
-            <span>Uploaded on {formatDate(item.uploadDate)}</span>
           </div>
         </div>
       </div>

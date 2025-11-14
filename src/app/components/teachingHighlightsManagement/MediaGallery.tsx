@@ -1,29 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from 'react';
-import Icon from '../ui/Icon';
-import Image from '../ui/AppImage';
-import Button from '../ui/Button';
-import MediaModal from './MediaModal';
+import React, { useState } from "react";
+import Icon from "@/app/components/ui/Icon";
+import Image from "@/app/components/ui/AppImage";
+import Button from "@/app/components/ui/Button";
+import MediaModal from "./MediaModal";
+import { MediaItem } from "./index";
 
-// TypeScript type for media item
-export interface MediaItem {
-  id: number | string;
-  name: string;
-  type: 'video' | 'image';
-  url: string;
-  size: number;
-  uploadDate: string | Date;
-  format?: string;
-}
-
-// Props for MediaGallery
-interface MediaGalleryProps {
+export interface MediaGalleryProps {
   mediaItems: MediaItem[];
-  selectedItems: (number | string)[];
-  onItemSelect: (id: number | string) => void;
-  onItemDelete: (id: number | string) => void;
-  onItemReplace: (id: number | string) => void;
+  selectedItems: string[];
+  onItemSelect: (id: string) => void;
+  onItemDelete: (id: string) => void;
+  onItemReplace: (id: string) => void;
   showBulkActions: boolean;
 }
 
@@ -33,62 +24,55 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
   onItemSelect,
   onItemDelete,
   onItemReplace,
-  showBulkActions
+  showBulkActions,
 }) => {
-  const [modalItem, setModalItem] = useState<MediaItem | null>(null);
+  const [modalItem, setModalItem] = useState<any>(null);
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+  const getFileIcon = (mime: string) =>
+    mime.startsWith("video") ? "Video" : "Image";
+
+  const formatFileSize = (bytes = 0) => {
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
   };
 
-  const formatDate = (date: string | Date) => {
-    const d = typeof date === 'string' ? new Date(date) : date;
-    return d.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
+  const formatDate = (date?: string) => {
+    if (!date) return "";
+    return new Date(date).toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+      day: "numeric",
     });
   };
 
-  const getFileIcon = (type: 'video' | 'image') => {
-    return type === 'video' ? 'Video' : 'Image';
-  };
-
   const handleItemClick = (item: MediaItem) => {
-    setModalItem(item);
+    setModalItem({
+      ...item,
+      name: item.name.substring(item.name.indexOf("_") + 1),
+      type: item.mime,
+      uploadDate: item.createdAt,
+    });
   };
 
-  const handleModalClose = () => {
-    setModalItem(null);
-  };
+  const closeModal = () => setModalItem(null);
 
-  if (!mediaItems || mediaItems.length === 0) {
+  if (!mediaItems?.length) {
     return (
       <div className="bg-card rounded-xl p-12 text-center">
         <div className="w-20 h-20 mx-auto bg-muted rounded-full flex items-center justify-center mb-4">
           <Icon name="FileImage" size={40} className="text-muted-foreground" />
         </div>
+
         <h3 className="text-xl font-semibold text-foreground mb-2">
           No highlights yet
         </h3>
+
         <p className="text-muted-foreground mb-6">
-          Start building your teaching portfolio by uploading your first video or image
+          Start building your teaching portfolio
         </p>
-        <div className="flex flex-wrap justify-center gap-2 text-sm">
-          <span className="bg-primary/20 text-primary px-3 py-1 rounded-full">
-            Share classroom moments
-          </span>
-          <span className="bg-secondary/20 text-secondary px-3 py-1 rounded-full">
-            Showcase teaching skills
-          </span>
-          <span className="bg-accent/20 text-accent px-3 py-1 rounded-full">
-            Build your portfolio
-          </span>
-        </div>
       </div>
     );
   }
@@ -98,35 +82,40 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {mediaItems.map((item) => (
           <div
-            key={item.id}
-            className="bg-card rounded-lg border border-border overflow-hidden shadow-card hover:shadow-modal transition-all duration-200 hover-scale"
+            key={item._id}
+            className="bg-card rounded-lg border border-border overflow-hidden shadow-card hover:shadow-modal transition-all hover-scale"
           >
+            {/* Checkbox (Bulk Select Mode) */}
             {showBulkActions && (
               <div className="absolute top-2 left-2 z-10">
                 <input
                   type="checkbox"
-                  checked={selectedItems.includes(item.id)}
-                  onChange={() => onItemSelect(item.id)}
-                  className="w-4 h-4 text-primary bg-card border-border rounded focus:ring-primary focus:ring-2"
+                  checked={selectedItems.includes(item._id)}
+                  onChange={() => onItemSelect(item._id)}
+                  className="w-4 h-4 text-primary bg-card border-border rounded focus:ring-2 focus:ring-primary"
                 />
               </div>
             )}
 
+            {/* Thumbnail */}
             <div
               className="relative aspect-video bg-muted cursor-pointer"
               onClick={() => handleItemClick(item)}
             >
-              {item.type === 'video' ? (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                    <Icon name="Play" size={24} className="text-primary ml-1" />
+              {item.mime.startsWith("video") ? (
+                <>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
+                      <Icon name="Play" size={24} className="text-primary" />
+                    </div>
                   </div>
+
                   <video
                     src={item.url}
                     className="absolute inset-0 w-full h-full object-cover"
                     muted
                   />
-                </div>
+                </>
               ) : (
                 <Image
                   src={item.url}
@@ -135,32 +124,41 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
                 />
               )}
 
+              {/* MIME Indicator */}
               <div className="absolute top-2 right-2">
                 <div
-                  className={`
-                    px-2 py-1 rounded-full text-xs font-medium
-                    ${item.type === 'video'
-                      ? 'bg-primary/90 text-primary-foreground'
-                      : 'bg-secondary/90 text-secondary-foreground'}
-                  `}
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    item.mime.startsWith("video")
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary text-secondary-foreground"
+                  }`}
                 >
-                  <Icon name={getFileIcon(item.type)} size={12} className="inline mr-1" />
-                  {item.type.toUpperCase()}
+                  <Icon
+                    name={getFileIcon(item.mime)}
+                    size={12}
+                    className="inline mr-1"
+                  />
+                  {item.mime.split("/")[0].toUpperCase()}
                 </div>
               </div>
             </div>
 
+            {/* Meta */}
             <div className="p-3">
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-medium text-foreground truncate">{item.name}</h4>
+                  <h4 className="text-sm font-medium truncate">
+                    {item.name.substring(item.name.indexOf("_") + 1)}
+                  </h4>
+
                   <div className="flex items-center space-x-2 mt-1 text-xs text-muted-foreground">
                     <span>{formatFileSize(item.size)}</span>
                     <span>•</span>
-                    <span>{formatDate(item.uploadDate)}</span>
+                    <span>{formatDate(item.createdAt)}</span>
                   </div>
                 </div>
 
+                {/* Item Menu */}
                 <div className="relative group">
                   <Button
                     variant="ghost"
@@ -170,30 +168,30 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
                     <Icon name="MoreVertical" size={14} />
                   </Button>
 
-                  <div className="absolute right-0 top-full mt-1 w-32 bg-popover border border-border rounded-lg shadow-modal opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
-                    <div className="py-1">
-                      <button
-                        onClick={() => handleItemClick(item)}
-                        className="w-full px-3 py-2 text-left text-sm text-foreground hover:bg-muted transition-colors flex items-center space-x-2"
-                      >
-                        <Icon name="Eye" size={14} />
-                        <span>View</span>
-                      </button>
-                      <button
-                        onClick={() => onItemReplace(item.id)}
-                        className="w-full px-3 py-2 text-left text-sm text-foreground hover:bg-muted transition-colors flex items-center space-x-2"
-                      >
-                        <Icon name="RefreshCw" size={14} />
-                        <span>Replace</span>
-                      </button>
-                      <button
-                        onClick={() => onItemDelete(item.id)}
-                        className="w-full px-3 py-2 text-left text-sm text-error hover:bg-error/10 transition-colors flex items-center space-x-2"
-                      >
-                        <Icon name="Trash2" size={14} />
-                        <span>Delete</span>
-                      </button>
-                    </div>
+                  <div className="absolute right-0 top-full mt-1 w-32 bg-popover border border-border rounded-lg shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20">
+                    <button
+                      onClick={() => handleItemClick(item)}
+                      className="w-full px-3 py-2 text-left text-sm hover:bg-muted flex items-center space-x-2"
+                    >
+                      <Icon name="Eye" size={14} />
+                      <span>View</span>
+                    </button>
+
+                    <button
+                      onClick={() => onItemReplace(item._id)}
+                      className="w-full px-3 py-2 text-left text-sm hover:bg-muted flex items-center space-x-2"
+                    >
+                      <Icon name="RefreshCw" size={14} />
+                      <span>Replace</span>
+                    </button>
+
+                    <button
+                      onClick={() => onItemDelete(item._id)}
+                      className="w-full px-3 py-2 text-left text-sm text-error hover:bg-error/10 flex items-center space-x-2"
+                    >
+                      <Icon name="Trash2" size={14} />
+                      <span>Delete</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -205,14 +203,14 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({
       {modalItem && (
         <MediaModal
           item={modalItem}
-          onClose={handleModalClose}
+          onClose={closeModal}
           onDelete={() => {
-            onItemDelete(modalItem.id);
-            handleModalClose();
+            modalItem._id && onItemDelete(modalItem._id);
+            closeModal();
           }}
           onReplace={() => {
-            onItemReplace(modalItem.id);
-            handleModalClose();
+            modalItem._id && onItemReplace(modalItem._id);
+            closeModal();
           }}
         />
       )}

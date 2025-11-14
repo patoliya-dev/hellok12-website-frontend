@@ -1,44 +1,42 @@
 "use client";
 
-import React from 'react';
-import Icon from '../ui/Icon';
-import Image from '../ui/AppImage';
-import Button from '../ui/Button';
+import React from "react";
+import Icon from "@/app/components/ui/Icon";
+import Image from "@/app/components/ui/AppImage";
+import Button from "@/app/components/ui/Button";
 
-// TypeScript types for props
-interface Instructor {
-  name: string;
+export interface LessonItem {
+  _id: string;
   title: string;
-  avatar: string;
-  verified: boolean;
+  type: string;
+  schedule: { duration: string };
 }
 
-interface Course {
-  title: string;
-  description: string;
-  fullDescription?: string;
-  image: string;
-  instructor: Instructor;
-  category: string;
-  level: string;
-  rating: number;
-  reviewCount: number;
-  enrolledStudents: number;
-  duration: string;
-  totalLessons: number;
+export interface Course {
+  _id?: string;
+  title?: string;
+  description?: string;
+  averageRating?: number;
+  reviewsCount?: number;
+  enrolledCount?: number;
+  lessons?: LessonItem[];
+  isTrialAvailable?: boolean;
+  lessonType?: "1-on-1" | "group";
+  mode?: "online" | "in-person";
+  introImageRef?: { url: string };
   price: number;
-  originalPrice?: number;
-  hasTrialLesson?: boolean;
 }
 
-interface CourseHeroProps {
+interface Props {
   course: Course | null;
   onEnroll: () => void;
   onTrial: () => void;
 }
 
-const CourseHero: React.FC<CourseHeroProps> = ({ course, onEnroll, onTrial }) => {
+const CourseHero: React.FC<Props> = ({ course, onEnroll, onTrial }) => {
   if (!course) return null;
+
+  const getTypeIcon = () => (course.lessonType === "1-on-1" ? "User" : "Users");
 
   return (
     <section className="border-b border-border">
@@ -54,27 +52,67 @@ const CourseHero: React.FC<CourseHeroProps> = ({ course, onEnroll, onTrial }) =>
               {course.description}
             </p>
 
-            {/* Course Stats */}
+            {/* Stats */}
             <div className="flex flex-wrap items-center gap-6 mb-6">
               <div className="flex items-center space-x-2">
-                <Icon name="Star" size={20} className="text-warning text-secondary fill-current" />
-                <span className="font-semibold text-foreground">{course.rating}</span>
-                <span className="text-muted-foreground">({course.reviewCount} reviews)</span>
+                <Icon
+                  name="Star"
+                  size={20}
+                  className="text-secondary fill-current"
+                />
+                <span className="font-semibold text-foreground">
+                  {(Math.round((course.averageRating ?? 0) * 10) / 10).toFixed(
+                    1
+                  )}
+                </span>
+                <span className="text-muted-foreground">
+                  ({course.reviewsCount} reviews)
+                </span>
               </div>
 
               <div className="flex items-center space-x-2">
                 <Icon name="Users" size={20} className="text-primary" />
-                <span className="text-muted-foreground">{course.enrolledStudents.toLocaleString()} students</span>
+                <span className="text-muted-foreground">
+                  {course.enrolledCount} students
+                </span>
               </div>
 
               <div className="flex items-center space-x-2">
-                <Icon name="Clock" size={20} className="text-secondary" />
-                <span className="text-muted-foreground">{course.duration}</span>
+                <Icon name="BookOpen" size={20} className="text-secondary" />
+                <span className="text-muted-foreground">
+                  {course.lessons?.length ?? 0} lessons
+                </span>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Icon name="BookOpen" size={20} className="text-accent" />
-                <span className="text-muted-foreground">{course.totalLessons} lessons</span>
+              {/* Tags */}
+              <div className="w-full flex gap-2">
+                {course.lessonType && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-[#2563eb]/5 text-[#2563eb]">
+                    <Icon name={getTypeIcon()} size={12} />
+                    {course.lessonType === "1-on-1" ? "1-on-1" : "Group"}
+                  </span>
+                )}
+
+                {course.mode === "online" && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-[#10b981]/5 text-[#10b981] rounded-full">
+                    <Icon name="Video" size={12} />
+                    Online
+                  </span>
+                )}
+
+                {course.mode === "in-person" && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-[#10b981]/5 text-[#10b981] rounded-full">
+                    <Icon name="MapPin" size={12} />
+                    In-Person
+                  </span>
+                )}
+
+                {course.isTrialAvailable && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-[#0ea5e9]/5 text-[#0ea5e9] rounded-full">
+                    <Icon name="Gift" size={12} />
+                    Trial Lesson
+                  </span>
+                )}
               </div>
             </div>
 
@@ -89,7 +127,7 @@ const CourseHero: React.FC<CourseHeroProps> = ({ course, onEnroll, onTrial }) =>
                 Enroll Now - ${course.price}
               </Button>
 
-              {course.hasTrialLesson && (
+              {course.isTrialAvailable && (
                 <Button
                   variant="outline"
                   size="lg"
@@ -101,14 +139,13 @@ const CourseHero: React.FC<CourseHeroProps> = ({ course, onEnroll, onTrial }) =>
                 </Button>
               )}
             </div>
-
           </div>
 
           {/* Course Image */}
           <div className="order-1 lg:order-2">
             <div className="relative">
               <Image
-                src={course.image}
+                src={course.introImageRef?.url || "/assets/images/no_image.png"}
                 alt={course.title}
                 className="w-full h-64 lg:h-80 object-cover rounded-lg shadow-medium"
               />
