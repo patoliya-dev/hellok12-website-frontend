@@ -4,7 +4,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { getAccessToken, setAccessToken, clearAuthStorage } from "./storage";
 
 // Base URL from env
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://dev-api.hellok12.com/api/v1";
 
 /**
  * List of endpoints to exclude from triggering token refresh logic.
