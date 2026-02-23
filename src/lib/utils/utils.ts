@@ -4,24 +4,26 @@ import { toast } from "react-toastify";
 
 export const buildQueryParams = (
   filters: any,
-  pagination: { limit: string; offset: string }
+  pagination: { limit: string | number; offset: string | number },
 ) => {
   const params = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, value]) => {
     if (value === "" || value === undefined || value === null) return;
 
-    // Handle arrays (like price)
     if (Array.isArray(value)) {
+      if (value.length === 0) return;
       params.append(key, JSON.stringify(value));
+    } else if (typeof value === "boolean") {
+      params.append(key, String(value));
     } else {
       params.append(key, value as string);
     }
   });
 
   // Pagination
-  params.append("limit", pagination.limit);
-  params.append("offset", pagination.offset);
+  params.append("limit", String(pagination.limit));
+  params.append("offset", String(pagination.offset));
 
   return params.toString();
 };
@@ -59,7 +61,7 @@ export const getTimeAgo = (dateString: string) => {
   const date = new Date(dateString);
   const now = new Date();
   const diffInDays = Math.floor(
-    (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+    (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
   );
 
   if (diffInDays === 0) return "Today";

@@ -6,7 +6,7 @@ import SearchBar from "@/app/components/ui/SearchBar";
 import TeacherGrid from "@/app/components/teacherSearchDiscovery/TeacherGrid";
 import Button from "@/app/components/ui/Button";
 import TeacherFilters from "@/app/components/teacherSearchDiscovery/TeacherFilter";
-import { getAllTeachers } from "@/lib/services/teacher-service";
+import { fetchTeacherSchools, getAllTeachers } from "@/lib/services/teacher-service";
 import type { Teacher } from "@/app/components/teacherSearchDiscovery/TeacherCard";
 import PageTitle from "../components/PageTitle";
 import PublicNavigation from "../components/ui/PublicNavigation";
@@ -27,11 +27,14 @@ const itemsPerPage = 8;
 
 export default function FindTeacherPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [offset, setOffset] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [schoolOptions, setSchoolOptions] = useState<
+    Array<{ value: string; label: string }>
+  >([]);
   const [filters, setFilters] = useState<any>({
     school: "",
     languages: "",
@@ -39,7 +42,7 @@ export default function FindTeacherPage() {
     availability: "",
     ageRange: "",
     rating: "",
-    price: [],
+    price: "",
     onlineStatus: "",
     lessonType: "",
     name: "",
@@ -72,6 +75,7 @@ export default function FindTeacherPage() {
 
   const loadTeachers = useCallback(
     async (loadMore = false) => {
+      if (loading) return;
       try {
         const currentOffset = loadMore ? offset : 0;
         setLoading(true);
@@ -100,16 +104,42 @@ export default function FindTeacherPage() {
         setLoading(false);
       }
     },
-    [filters, searchQuery, quickFilters, offset]
+    [filters, searchQuery, quickFilters, offset, loading]
   );
 
   useEffect(() => {
-    setTeachers([]);
+    // setTeachers([]);
     setOffset(0);
-    setHasMore(false);
+    // setHasMore(false);
     loadTeachers(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, searchQuery, quickFilters]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const loadSchoolOptions = async () => {
+      try {
+        const response = await fetchTeacherSchools();
+        const options = (response?.data || []).map(
+          (school: { _id: string; name: string }) => ({
+            value: school._id,
+            label: school.name,
+          })
+        );
+
+        if (!ignore) setSchoolOptions(options);
+      } catch (error) {
+        if (!ignore) setSchoolOptions([]);
+      }
+    };
+
+    loadSchoolOptions();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -149,6 +179,7 @@ export default function FindTeacherPage() {
             <TeacherFilters
               filters={filters}
               onFiltersChange={(value: any) => setFilters(value)}
+              schoolOptions={schoolOptions}
             />
           </div>
         )}
@@ -158,11 +189,10 @@ export default function FindTeacherPage() {
             <Button
               variant="outline"
               onClick={() => handleQuickFilterToggle("mode", "online")}
-              className={`cursor-pointer transition-colors ${
-                isFilterActive("mode", "online")
-                  ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
-                  : "hover:bg-primary border-muted-1 bg-transparent"
-              }`}
+              className={`cursor-pointer transition-colors ${isFilterActive("mode", "online")
+                ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
+                : "hover:bg-primary border-muted-1 bg-transparent"
+                }`}
             >
               Online
             </Button>
@@ -170,11 +200,10 @@ export default function FindTeacherPage() {
             <Button
               variant="outline"
               onClick={() => handleQuickFilterToggle("mode", "in-person")}
-              className={`cursor-pointer transition-colors ${
-                isFilterActive("mode", "in-person")
-                  ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
-                  : "hover:bg-primary border-muted-1 bg-transparent"
-              }`}
+              className={`cursor-pointer transition-colors ${isFilterActive("mode", "in-person")
+                ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
+                : "hover:bg-primary border-muted-1 bg-transparent"
+                }`}
             >
               In-Person
             </Button>
@@ -182,11 +211,10 @@ export default function FindTeacherPage() {
             <Button
               variant="outline"
               onClick={() => handleQuickFilterToggle("lessonType", "group")}
-              className={`cursor-pointer transition-colors ${
-                isFilterActive("lessonType", "group")
-                  ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
-                  : "hover:bg-primary border-muted-1 bg-transparent"
-              }`}
+              className={`cursor-pointer transition-colors ${isFilterActive("lessonType", "group")
+                ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
+                : "hover:bg-primary border-muted-1 bg-transparent"
+                }`}
             >
               Group
             </Button>
@@ -194,22 +222,20 @@ export default function FindTeacherPage() {
             <Button
               variant="outline"
               onClick={() => handleQuickFilterToggle("lessonType", "1-on-1")}
-              className={`cursor-pointer transition-colors ${
-                isFilterActive("lessonType", "1-on-1")
-                  ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
-                  : "hover:bg-primary border-muted-1 bg-transparent"
-              }`}
+              className={`cursor-pointer transition-colors ${isFilterActive("lessonType", "1-on-1")
+                ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
+                : "hover:bg-primary border-muted-1 bg-transparent"
+                }`}
             >
               1-on-1
             </Button>
             <Button
               variant="outline"
               onClick={() => handleQuickFilterToggle("isTrialAvailable")}
-              className={`cursor-pointer transition-colors ${
-                isFilterActive("isTrialAvailable")
-                  ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
-                  : "hover:bg-primary border-muted-1 bg-transparent"
-              }`}
+              className={`cursor-pointer transition-colors ${isFilterActive("isTrialAvailable")
+                ? "bg-primary text-white border-blue-200 hover:bg-blue-500"
+                : "hover:bg-primary border-muted-1 bg-transparent"
+                }`}
             >
               Trial Lessons
             </Button>

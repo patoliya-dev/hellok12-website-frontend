@@ -18,7 +18,7 @@ export function getTeacherById(id: string): Teacher | undefined {
 }
 
 export function getTeacherWithClasses(
-  teacherId: string
+  teacherId: string,
 ): TeacherWithClasses | undefined {
   const teacher = getTeacherById(teacherId);
   if (!teacher) return undefined;
@@ -28,13 +28,13 @@ export function getTeacherWithClasses(
 }
 
 export function getTeacherWithReviews(
-  teacherId: string
+  teacherId: string,
 ): TeacherWithReviews | undefined {
   const teacher = getTeacherById(teacherId);
   if (!teacher) return undefined;
 
   const reviews = mockReviews.filter(
-    (review) => review.teacherId === teacherId
+    (review) => review.teacherId === teacherId,
   );
   return { ...teacher, reviews };
 }
@@ -45,7 +45,7 @@ export function getClassById(id: string): Class | undefined {
 }
 
 export function getClassWithTeacher(
-  classId: string
+  classId: string,
 ): ClassWithTeacher | undefined {
   const classData = getClassById(classId);
   if (!classData) return undefined;
@@ -57,7 +57,7 @@ export function getClassWithTeacher(
 }
 
 export function getClassWithReviews(
-  classId: string
+  classId: string,
 ): ClassWithReviews | undefined {
   const classData = getClassById(classId);
   if (!classData) return undefined;
@@ -82,7 +82,18 @@ export async function getAllTeachers(filters: any, pagination: any) {
     const response = await api.get(`/find-teacher?${queryString}`);
     return response.data; // { success, data, count, nextOffset }
   } catch (error: any) {
-    errorToast(error.response?.data || error.message); 
+    errorToast(error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export async function fetchTeacherSchools() {
+  try {
+    const response = await api.get("/find-teacher/schools");
+    return response.data;
+  } catch (error: any) {
+    errorToast(error.response?.data || error.message);
+    throw error;
   }
 }
 
@@ -108,5 +119,29 @@ export const fetchDetails = async (teacherId: string) => {
     return response.data;
   } catch (error: any) {
     errorToast(error.response?.data || error.message);
+    throw error;
   }
 };
+
+export function parseAvailabilityValue(
+  availability?: string,
+): { startDate: Date; endDate: Date } | null {
+  if (!availability) return null;
+
+  const parts = availability.split(",");
+  if (parts.length === 1) {
+    return {
+      startDate: new Date(parts[0]),
+      endDate: new Date(parts[0]),
+    };
+  }
+
+  if (parts.length === 2) {
+    return {
+      startDate: new Date(parts[0]),
+      endDate: new Date(parts[1]),
+    };
+  }
+
+  return null;
+}

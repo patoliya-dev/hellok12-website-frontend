@@ -8,6 +8,7 @@ import DateRangePicker from "@/app/components/ui/DateRangePicker";
 import Select from "@/app/components/ui/Select";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
+import { parseAvailabilityValue } from "@/lib/services/teacher-service";
 
 type Filters = {
   school?: string | "";
@@ -16,19 +17,21 @@ type Filters = {
   availability?: string | "";
   ageRange?: string | "";
   rating?: string | "";
-  price?: [number, number] | [];
+  price?: [number, number] | [] | "";
 };
 
 type Props = {
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
   schoolSlug?: string;
+  schoolOptions?: Array<{ value: string; label: string }>;
 };
 
 export default function TeacherFilters({
   filters,
   onFiltersChange,
   schoolSlug,
+  schoolOptions = [],
 }: Props) {
   const [localFilters, setLocalFilters] = useState<Filters>(filters);
   const [priceInputs, setPriceInputs] = useState<{
@@ -62,7 +65,7 @@ export default function TeacherFilters({
       availability: "",
       ageRange: "",
       rating: "",
-      price: [],
+      price: "",
     };
     setPriceInputs({ min: "", max: "" });
     setLocalFilters(clearedFilters);
@@ -107,6 +110,34 @@ export default function TeacherFilters({
     }
   };
 
+  const handleAvailabilityChange = (dateRange: {
+    startDate?: Date | string | null;
+    endDate?: Date | string | null;
+  }) => {
+    if (!dateRange || (!dateRange.startDate && !dateRange.endDate)) {
+      handleChange("availability", "");
+      return;
+    }
+
+    const formatDate = (date: Date | string | null | undefined) => {
+      if (!date) return null;
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
+
+    const formattedStart = formatDate(dateRange.startDate);
+    const formattedEnd = formatDate(dateRange.endDate);
+
+    if (formattedStart && formattedEnd && formattedStart !== formattedEnd) {
+      handleChange("availability", `${formattedStart},${formattedEnd}`);
+    } else if (formattedStart) {
+      handleChange("availability", formattedStart);
+    }
+  };
+
   const ageRangeOptions = [
     { value: "", label: "Select age range..." },
     { value: "0-3", label: "0 - 3 years" },
@@ -117,10 +148,9 @@ export default function TeacherFilters({
     { value: "18+", label: "18+ years old" },
   ];
 
-  const schoolOptions = [
+  const dynamicSchoolOptions = [
     { value: "", label: "Select school" },
-    { value: "school1", label: "School 1" },
-    { value: "school2", label: "School 2" },
+    ...schoolOptions,
   ];
 
   const experienceOptions = [
@@ -140,7 +170,7 @@ export default function TeacherFilters({
             label="School"
             value={localFilters.school ?? ""}
             onChange={(val: any) => handleChange("school", val)}
-            options={schoolOptions}
+            options={dynamicSchoolOptions}
           />
         ) : null}
 
@@ -166,7 +196,11 @@ export default function TeacherFilters({
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block text-foreground">
             Availability
           </label>
-          <DateRangePicker className="border rounded-lg" />
+          <DateRangePicker
+            className="border rounded-lg"
+            onChange={handleAvailabilityChange}
+            value={parseAvailabilityValue(localFilters.availability)}
+          />
         </div>
 
         <Select
@@ -267,7 +301,7 @@ export default function TeacherFilters({
           <div className="flex w-full items-center gap-4 mt-5">
             <span className="text-xs text-[#2B67F6]">
               {Array.isArray(localFilters.price) &&
-              localFilters.price.length > 0
+                localFilters.price.length > 0
                 ? `$${localFilters.price[0]}`
                 : "--"}
             </span>
@@ -277,7 +311,7 @@ export default function TeacherFilters({
               max={500}
               value={
                 Array.isArray(localFilters.price) &&
-                localFilters.price.length === 2
+                  localFilters.price.length === 2
                   ? localFilters.price
                   : [0, 0]
               }
@@ -290,7 +324,7 @@ export default function TeacherFilters({
 
             <span className="text-xs text-[#2B67F6]">
               {Array.isArray(localFilters.price) &&
-              localFilters.price.length > 0
+                localFilters.price.length > 0
                 ? `$${localFilters.price[1]}`
                 : "--"}
             </span>

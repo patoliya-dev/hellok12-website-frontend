@@ -55,7 +55,7 @@ const TeacherProfileDetailPage: React.FC = () => {
     }
   }, [activeTab]);
 
-  const reviews = mockReviews ?? [];
+  const reviews = teacher?.feedbacks ?? mockReviews;
 
   // Calculate rating distribution
   const ratingDistribution = reviews?.reduce(
@@ -98,8 +98,8 @@ const TeacherProfileDetailPage: React.FC = () => {
         <TabNavigation
           activeTab={activeTab}
           onTabChange={(tab) => setActiveTab(tab as 'about' | 'courses' | 'reviews' | 'highlights')}
-          classesBadgeCount={teacher?.courses?.length ?? 0}
-          reviewsBadgeCount={reviews?.length ?? 0}
+          classesBadgeCount={teacher?.courses?.length}
+          reviewsBadgeCount={reviews?.length}
         />
 
         <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
@@ -107,20 +107,18 @@ const TeacherProfileDetailPage: React.FC = () => {
             <div className="lg:col-span-12">
               {activeTab === "about" && <AboutTab teacher={teacher as any} />}
               {activeTab === "courses" && (
-                <CoursesTab
-                  courses={teacher?.courses ?? []}
-                />
+                <CoursesTab courses={teacher?.courses} />
               )}
               {activeTab === "reviews" && (
                 <ReviewsTab
-                  reviews={teacher?.feedbacks ?? reviews}
-                  overallRating={teacher?.rating ?? teacher?.averageRating}
+                  reviews={teacher?.feedbacks}
+                  overallRating={teacher?.rating}
                   ratingDistribution={ratingDistribution}
                 />
               )}
               {activeTab === "highlights" && (
                 <TeachingHighlightsManagement
-                  highlights={teacher?.highlights ?? []}
+                  highlights={teacher?.highlights}
                 />
               )}
             </div>

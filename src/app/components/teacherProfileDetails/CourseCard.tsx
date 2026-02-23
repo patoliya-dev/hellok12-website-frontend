@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Icon from "@/app/components/ui/Icon";
 import Button from "@/app/components/ui/Button";
 
@@ -12,6 +12,7 @@ export interface CourseItem {
   description?: string;
   startDate?: string;
   endDate?: string;
+  lastLessonDate?: string;
   lessonType?: "1-on-1" | "group";
   location?: string;
   enrolledCount?: number;
@@ -28,14 +29,58 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ courseItem }) => {
-  const router = useRouter();
+  const pathname = usePathname();
+
+  const toValidDate = (value?: string) => {
+    if (!value) return null;
+
+    // Date-only values should remain bookable through the user's local day.
+    const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(value);
+    if (isDateOnly) {
+      const parsed = new Date(`${value}T23:59:59.999`);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    }
+
+    // If datetime is missing timezone info, normalize to UTC for consistent parsing.
+    const hasTime = /T\d{2}:\d{2}/.test(value);
+    const hasTimezone = /(?:Z|[+-]\d{2}:?\d{2})$/.test(value);
+
+    const normalized = hasTime && !hasTimezone ? `${value}Z` : value;
+
+    const parsed = new Date(normalized);
+
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  };
+
+  const getLastLessonDate = (course: CourseItem) => {
+    const backendLastLessonDate = toValidDate(course?.lastLessonDate);
+    if (backendLastLessonDate) return backendLastLessonDate;
+    return toValidDate(course?.endDate);
+  };
 
   const handleBookNow = () => {
-    router.push(`/course-detail/${courseItem.id}`);
+    const appLoginBase =
+      process.env.NEXT_PUBLIC_APP_FRONTEND_URL ?? "https://dev-app.hellok12.com";
+    const teacherId = pathname?.split("/").filter(Boolean).pop();
+    const appTeacherDetailPath = teacherId
+      ? `/parent/teacher-profile-detail/${teacherId}`
+      : "/parent/find-teacher";
+    const appTeacherDetailUrl = `${appLoginBase}${appTeacherDetailPath}`;
+
+    window.location.href = `${appLoginBase}/login?next=${encodeURIComponent(appTeacherDetailUrl)}#signin`;
   };
 
   const getTypeIcon = () =>
     courseItem?.lessonType === "1-on-1" ? "User" : "Users";
+
+  const lastLessonDate = getLastLessonDate(courseItem);
+  const isCourseOutdated =
+    !!lastLessonDate && lastLessonDate.getTime() <= Date.now();
+  const isClassFull =
+    courseItem?.lessonType === "group" &&
+    typeof courseItem?.enrolledCount === "number" &&
+    typeof courseItem?.studentCapacity === "number" &&
+    courseItem.enrolledCount >= courseItem.studentCapacity;
 
   return (
     <div className="bg-card border border-border rounded-lg p-6 hover:shadow-interactive transition-smooth flex flex-col justify-between">
@@ -91,10 +136,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ courseItem }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            {courseItem.lessonType === "group" &&
-            courseItem.enrolledCount &&
-            courseItem.studentCapacity &&
-            courseItem.enrolledCount >= courseItem.studentCapacity ? (
+            {isCourseOutdated ? (
+              <Button variant="secondary" disabled>
+                Course Ended
+              </Button>
+            ) : isClassFull ? (
               <Button variant="secondary" disabled className="bg-foreground">
                 Class Full
               </Button>
@@ -117,7 +163,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ courseItem }) => {
             <Icon name={getTypeIcon()} size={12} />
             {courseItem.lessonType &&
               courseItem.lessonType.charAt(0).toUpperCase() +
-                courseItem.lessonType.slice(1)}
+              courseItem.lessonType.slice(1)}
           </span>
 
           {courseItem.mode === "online" && (
