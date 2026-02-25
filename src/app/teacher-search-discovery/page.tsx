@@ -129,7 +129,7 @@ export default function FindTeacherPage() {
         );
 
         if (!ignore) setSchoolOptions(options);
-      } catch (error) {
+      } catch {
         if (!ignore) setSchoolOptions([]);
       }
     };

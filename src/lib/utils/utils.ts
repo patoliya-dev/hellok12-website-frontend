@@ -37,16 +37,6 @@ export const languageOptions = ISO6391.getAllCodes().map((code) => ({
   label: ISO6391.getName(code),
 }));
 
-export const successToast = (message: string) => {
-  toast.success(message, {
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
-};
-
 export const errorToast = (message = "Something went wrong") => {
   toast.error(message, {
     hideProgressBar: false,
