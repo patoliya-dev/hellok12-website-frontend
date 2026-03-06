@@ -10,21 +10,6 @@ export const setAccessToken = (token: string) => {
 
 export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY);
 
-// user helpers
-export const setCurrentUser = (user: string) => {
-  if (user) localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-  else localStorage.removeItem(CURRENT_USER_KEY);
-};
-
-export const getCurrentUser = () => {
-  try {
-    const raw = localStorage.getItem(CURRENT_USER_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-};
-
 export const clearAuthStorage = () => {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(CURRENT_USER_KEY);
