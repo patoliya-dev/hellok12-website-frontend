@@ -103,7 +103,7 @@ const StatsSection: React.FC = () => {
       };
 
       requestAnimationFrame(animateCount);
-    }, [finalValue, duration, isVisible]);
+    }, [finalValue, duration]);
 
     const formatNumber = (num: number): string => {
       if (num >= 1_000_000) {
@@ -138,6 +138,7 @@ const StatsSection: React.FC = () => {
 
     return () => {
       if (sectionRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         observer.unobserve(sectionRef.current);
       }
     };
@@ -222,12 +223,18 @@ const StatsSection: React.FC = () => {
                 className="bg-card rounded-xl p-6 text-center shadow-soft border border-border"
               >
                 <div className="w-12 h-12 flex items-center justify-center mx-auto mb-4">
-                  <Icon name={achievement.icon} size={24} className="text-primary" />
+                  <Icon
+                    name={achievement.icon}
+                    size={24}
+                    className="text-primary"
+                  />
                 </div>
                 <h4 className="font-semibold text-foreground mb-1">
                   {achievement.title}
                 </h4>
-                <p className="text-sm text-muted-foreground">{achievement.year}</p>
+                <p className="text-sm text-muted-foreground">
+                  {achievement.year}
+                </p>
               </div>
             ))}
           </div>

@@ -1,9 +1,9 @@
 "use client";
-import React from 'react';
-import Button from '../../components/ui/Button';
 
-// Props interface
-interface MobileBottomBarProps {
+import React from "react";
+import Button from "@/app/components/ui/Button";
+
+export interface MobileBottomBarProps {
   onViewAllClasses: () => void;
   onQuickContact: () => void;
   classCount: number;
@@ -12,7 +12,7 @@ interface MobileBottomBarProps {
 const MobileBottomBar: React.FC<MobileBottomBarProps> = ({
   onViewAllClasses,
   onQuickContact,
-  classCount
+  classCount,
 }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border p-4 lg:hidden z-50">
@@ -26,6 +26,7 @@ const MobileBottomBar: React.FC<MobileBottomBarProps> = ({
         >
           Contact
         </Button>
+
         <Button
           variant="default"
           size="lg"

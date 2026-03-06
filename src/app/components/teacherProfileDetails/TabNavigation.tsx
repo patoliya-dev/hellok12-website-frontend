@@ -1,28 +1,36 @@
 "use client";
 
 import React from "react";
-import Icon from "../../components/ui/Icon";
+import Icon from "@/app/components/ui/Icon";
 
-interface TabNavigationProps {
-  activeTab: "about" | "courses" | "reviews" | "highlights";
-  onTabChange: (tabId: "about" | "courses" | "reviews" | "highlights") => void;
+export interface TabNavigationProps {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
   classesBadgeCount?: number;
   reviewsBadgeCount?: number;
 }
 
-interface Tab {
-  id: "about" | "courses" | "reviews" | "highlights";
-  label: string;
-  icon: string;
-  badge?: number;
-}
-
-const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange, classesBadgeCount = 0, reviewsBadgeCount = 0 }) => {
-  const tabs: Tab[] = [
+const TabNavigation: React.FC<TabNavigationProps> = ({
+  activeTab,
+  onTabChange,
+}) => {
+  const tabs = [
     { id: "about", label: "About", icon: "User" },
-    { id: "courses", label: "Courses", icon: "BookOpen", badge: classesBadgeCount },
-    { id: "reviews", label: "Reviews", icon: "Star", badge: reviewsBadgeCount },
-    { id: "highlights", label: "Highlights", icon: "Clapperboard" }
+    {
+      id: "courses",
+      label: "Courses",
+      icon: "BookOpen",
+    },
+    {
+      id: "reviews",
+      label: "Reviews",
+      icon: "Star",
+    },
+    {
+      id: "highlights",
+      label: "Highlights",
+      icon: "Clapperboard",
+    },
   ];
 
   return (
@@ -35,10 +43,11 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange, c
               role="tab"
               aria-selected={activeTab === tab.id}
               aria-controls={`${tab.id}-panel`}
-              className={`flex items-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-smooth ${activeTab === tab.id
-                ? "text-primary border-primary"
-                : "text-text-secondary border-transparent hover:text-foreground hover:border-border"
-                }`}
+              className={`flex items-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-smooth ${
+                activeTab === tab.id
+                  ? "text-primary border-primary"
+                  : "text-muted-foreground border-transparent hover:text-foreground hover:border-border"
+              }`}
               onClick={() => onTabChange(tab.id)}
             >
               <Icon name={tab.icon} size={16} />

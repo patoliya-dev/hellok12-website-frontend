@@ -1,98 +1,105 @@
 "use client";
 
-import React from 'react';
-import Image from '../../components/ui/AppImage';
-import Icon from '../../components/ui/Icon';
+import React from "react";
+import Image from "@/app/components/ui/AppImage";
+import Icon from "@/app/components/ui/Icon";
 
-// Type for individual review
-interface Review {
-  id?: string | number;
-  studentAvatar?: string;
-  studentName?: string;
-  rating: number;
-  date: string;
-  verified?: boolean;
-  comment?: string;
-  className?: string;
-  classType?: string;
-  helpfulCount?: number;
+export interface ReviewAuthor {
+  name?: string;
+  profileImage?: string;
 }
 
-// Props interface
+export interface ReviewLesson {
+  name?: string;
+}
+
+export interface TeacherReview {
+  _id?: string;
+  rating: number;
+  comment?: string;
+  createdAt: string;
+  author?: ReviewAuthor;
+  lesson?: ReviewLesson;
+}
+
 interface ReviewCardProps {
-  review: Review;
+  review: TeacherReview;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
 
-    if (diffInDays === 0) return 'Today';
-    if (diffInDays === 1) return '1 day ago';
+    const diffInDays = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffInDays === 0) return "Today";
+    if (diffInDays === 1) return "1 day ago";
     if (diffInDays < 7) return `${diffInDays} days ago`;
     if (diffInDays < 30) return `${Math.floor(diffInDays / 7)} weeks ago`;
     if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} months ago`;
+
     return `${Math.floor(diffInDays / 365)} years ago`;
   };
 
   return (
     <div className="bg-card border border-border rounded-lg p-6">
       <div className="flex items-start gap-4">
-        {/* Student Avatar */}
+        {/* Avatar */}
         <div className="flex-shrink-0">
           <div className="w-12 h-12 rounded-full overflow-hidden bg-muted">
             <Image
-              src={review?.studentAvatar || ''}
-              alt={`${review?.studentName} avatar`}
+              src={review?.author?.profileImage || ""}
+              alt={`${review?.author?.name || "Student"} avatar`}
               className="w-full h-full object-cover"
             />
           </div>
         </div>
 
-        {/* Review Content */}
+        {/* Content */}
         <div className="flex-1">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h4 className="font-medium text-foreground">{review?.studentName}</h4>
+              <h4 className="font-medium text-foreground">
+                {review?.author?.name || "Anonymous"}
+              </h4>
             </div>
+
             <div className="flex items-center gap-2 mt-1 flex-col">
+              {/* Rating Stars */}
               <div className="flex">
-                {[...Array(5)]?.map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                   <Icon
                     key={i}
                     name="Star"
                     size={14}
-                    className={i < review?.rating ? 'text-warning fill-current text-secondary' : 'text-border text-secondary'}
+                    className={
+                      i < review.rating
+                        ? "text-secondary fill-current"
+                        : "text-muted-foreground"
+                    }
                   />
                 ))}
               </div>
-              <span className="text-sm text-text-secondary">
-                {getTimeAgo(review?.date)}
+
+              <span className="text-sm text-muted-foreground">
+                {getTimeAgo(review?.createdAt)}
               </span>
             </div>
           </div>
 
-          {/* Review Text */}
-          <p className="text-text-secondary text-sm leading-relaxed mb-3">
+          {/* Comment */}
+          <p className="text-muted-foreground text-sm leading-relaxed mb-3">
             {review?.comment}
           </p>
 
-          {/* Class Information */}
-          {review?.className && (
-            <div className="flex items-center gap-2 text-xs text-text-secondary">
+          {/* Lesson Info */}
+          {review?.lesson?.name && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Icon name="BookOpen" size={12} />
-              <span>Lesson: {review?.className}</span>
+              <span>Lesson: {review.lesson.name}</span>
             </div>
           )}
         </div>
